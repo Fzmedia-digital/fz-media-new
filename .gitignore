@@ -1,0 +1,5 @@
+# Ignore large video files exceeding GitHub limits
+assets/videos/*.mp4
+assets/img/logo/*.mp4
+deploy.ps1
+.nojekyll

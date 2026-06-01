@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Payment Gateway | FZ Media Checkout</title>
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    
+    <style>
+        /* 3D Interactive Credit Card Styles */
+        .checkout-container {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 48px;
+            align-items: flex-start;
+            padding: 40px 0 100px 0;
+        }
+
+        .card-preview-column {
+            position: sticky;
+            top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        /* 3D Card wrapper */
+        .credit-card-3d-wrapper {
+            width: 360px;
+            height: 220px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .credit-card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .credit-card-inner.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            color: #fff;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+        }
+
+        /* Front face Glassmorphism */
+        .card-face.front {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
+
+        .card-face.front::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -30%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, var(--accent-primary-glow) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        /* Back face Glassmorphism */
+        .card-face.back {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            transform: rotateY(180deg);
+            padding: 20px 0;
+            justify-content: flex-start;
+            gap: 20px;
+        }
+
+        /* Card details front styling */
+        .card-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-chip {
+            width: 44px;
+            height: 34px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+        }
+
+        .card-chip::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 8px;
+            right: 8px;
+            bottom: 4px;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 3px;
+        }
+
+        .card-type-logo {
+            font-family: var(--font-headings);
+            font-weight: 800;
+            font-size: 1.3rem;
+            letter-spacing: -0.03em;
+            background: linear-gradient(to right, #fff, var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-number-display {
+            font-size: 1.35rem;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 0.1em;
+            word-spacing: 0.15em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin: 28px 0 12px 0;
+        }
+
+        .card-meta-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .card-holder-meta h5, .card-expiry-meta h5 {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .card-holder-name, .card-expiry-date {
+            font-size: 0.88rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        /* Card details back styling */
+        .card-mag-strip {
+            width: 100%;
+            height: 38px;
+            background: #111;
+        }
+
+        .card-signature-box {
+            margin: 0 24px;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 12px;
+            color: #000;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .card-back-text {
+            margin: 10px 24px 0 24px;
+            font-size: 0.62rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* Payment Tabs */
+        .checkout-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+            padding: 6px;
+            border-radius: var(--radius-md);
+            background: rgba(255,255,255,0.01);
+        }
+
+        .checkout-tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-snappy);
+            text-align: center;
+        }
+
+        .checkout-tab-btn.active {
+            background: var(--accent-primary-glow);
+            color: var(--accent-primary);
+            border: 1px solid rgba(var(--accent-primary-h), var(--accent-primary-s), var(--accent-primary-l), 0.15);
+        }
+
+        .payment-tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .payment-tab-content.active {
+            display: block;
+        }
+
+        /* Order Summary Card */
+        .order-summary-card {
+            width: 100%;
+            max-width: 360px;
+            padding: 24px;
+        }
+
+        .summary-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 16px;
+            margin-top: 20px;
+        }
+
+        /* Interactive Success Modal overlay */
+        .success-overlay-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .success-overlay-modal.open {
+            display: flex;
+            opacity: 1;
+        }
+
+        .success-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-glow);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            width: 90%;
+            max-width: 440px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0.85); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Checkmark animation */
+        .success-checkmark-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px auto;
+            color: var(--accent-secondary);
+            font-size: 2.5rem;
+            position: relative;
+            box-shadow: 0 0 20px var(--accent-secondary-glow);
+        }
+
+        @media (max-width: 991px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .card-preview-column {
+                position: relative;
+                top: 0;
+            }
+            .order-summary-card {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Shared Header Mounting -->
+    <header id="global-header"></header>
+
+    <main style="padding-top: 80px; min-height: 100vh;">
+        
+        <!-- Header banner -->
+        <section class="section-padding" style="padding-bottom: 20px;">
+            <div class="container">
+                <div class="section-header" style="margin-bottom: 10px;">
+                    <span class="section-badge">Secure Gateway</span>
+                    <h1 class="section-title">FZ Media Global Checkout</h1>
+                    <p class="section-subtitle">Complete your transaction. Your high-retention onboarding workflow initiates automatically on payment completion.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Checkout Form & Card Showcase -->
+        <section style="padding-bottom: 100px;">
+            <div class="container">
+                <div class="checkout-container">
+                    
+                    <!-- Left Column: 3D interactive Credit Card and Pricing summary -->
+                    <div class="card-preview-column">
+                        
+                        <!-- 3D Credit Card Box -->
+                        <div class="credit-card-3d-wrapper" id="card-3d-wrapper">
+                            <div class="credit-card-inner" id="card-3d-inner">
+                                
+                                <!-- Front Face -->
+                                <div class="card-face front">
+                                    <div class="card-header-row">
+                                        <div class="card-chip"></div>
+                                        <span class="card-type-logo">FZ Credit</span>
+                                    </div>
+                                    
+                                    <div class="card-number-display" id="card-disp-num">•••• •••• •••• ••••</div>
+                                    
+                                    <div class="card-meta-row">
+                                        <div class="card-holder-meta">
+                                            <h5>Cardholder</h5>
+                                            <div class="card-holder-name" id="card-disp-name">YOUR NAME HERE</div>
+                                        </div>
+                                        <div class="card-expiry-meta">
+                                            <h5>Expires</h5>
+                                            <div class="card-expiry-date" id="card-disp-expiry">MM/YY</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Back Face -->
+                                <div class="card-face back">
+                                    <div class="card-mag-strip"></div>
+                                    <div style="font-size: 0.6rem; color: var(--text-muted); padding-left: 24px; font-weight: bold; text-transform: uppercase;">CVV Code</div>
+                                    <div class="card-signature-box" id="card-disp-cvv">•••</div>
+                                    <p class="card-back-text">
+                                        This interactive card represents an elite glassmorphism design variable. Transacting securely under SSL and local storage database schemas.
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Order pricing Summary Card -->
+                        <div class="glass-card order-summary-card">
+                            <h3 style="font-size: 1.25rem; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">Order Summary</h3>
+                            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.95rem;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-secondary);">Selected Service</span>
+                                    <strong id="summary-service-name">Cinematic Video Editing</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-secondary);">Package Tier</span>
+                                    <strong id="summary-package-name" style="color: var(--accent-secondary);">Standard+</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span style="color: var(--text-secondary);">Setup & Onboarding</span>
+                                    <strong style="color: #4ade80;">FREE</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="summary-price-row">
+                                <span style="font-weight: 700;">Total Investment:</span>
+                                <strong style="font-family: var(--font-headings); font-size: 1.8rem; color: var(--accent-primary);" id="summary-total-price">$70</strong>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column: Registration and Payment Tabs forms -->
+                    <div class="glass-card" style="padding: 40px;">
+                        
+                        <!-- Client Onboarding credentials form first -->
+                        <h3 id="checkout-reg-form-heading" style="font-size: 1.4rem; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                            1. Create Your Client Workspace Account
+                        </h3>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px;">This account allows you to track progress, upload footage, and leave frame-by-frame edits inside your dashboard.</p>
+                        
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" for="reg-name">Full Name *</label>
+                                <input type="text" id="reg-name" class="form-control" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" for="reg-company">Brand / Company Name *</label>
+                                <input type="text" id="reg-company" class="form-control" placeholder="e.g. Apex Tech Inc." required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" for="reg-email">Account Email *</label>
+                                <input type="email" id="reg-email" class="form-control" placeholder="john@company.com" required>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" for="reg-pass">Create Account Password *</label>
+                                <input type="password" id="reg-pass" class="form-control" placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <!-- Payment Methods Tab System -->
+                        <h3 style="font-size: 1.4rem; margin-bottom: 18px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                            2. Select Global Payment Gateway
+                        </h3>
+                        
+                        <div class="checkout-tabs">
+                            <button class="checkout-tab-btn active" data-target="pay-card">Credit Card</button>
+                            <button class="checkout-tab-btn" data-target="pay-paypal">PayPal</button>
+                            <button class="checkout-tab-btn" data-target="pay-crypto">Crypto Wallet</button>
+                            <button class="checkout-tab-btn" data-target="pay-wire">Bank Wire</button>
+                        </div>
+
+                        <!-- Tab 1: Credit Card Stripe style Form -->
+                        <form id="payment-card-form" class="payment-tab-content active">
+                            <div class="form-group">
+                                <label class="form-label" for="card-num-input">Card Number *</label>
+                                <input type="text" id="card-num-input" class="form-control" placeholder="4111 2222 3333 4444" maxlength="19" required>
+                            </div>
+                            
+                            <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="form-group">
+                                    <label class="form-label" for="card-expiry-input">Expiration Date *</label>
+                                    <input type="text" id="card-expiry-input" class="form-control" placeholder="MM/YY" maxlength="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="card-cvv-input">CVV Code *</label>
+                                    <input type="password" id="card-cvv-input" class="form-control" placeholder="•••" maxlength="3" required>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; margin-top: 24px; font-size: 1.05rem;">
+                                Authorize Transaction & onboarding
+                            </button>
+                        </form>
+
+                        <!-- Tab 2: PayPal -->
+                        <div id="pay-paypal" class="payment-tab-content" style="text-align: center; padding: 30px 20px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: rgba(255,255,255,0.01);">
+                            <span style="font-size: 2.2rem; display: block; margin-bottom: 12px;">💳 PayPal</span>
+                            <p style="font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5;">Click below to authorize securely via your international PayPal Account. Setup is fully automated on return.</p>
+                            <button class="btn-primary" id="paypal-sim-btn" style="background: #f59e0b; color: #000; border-color: #f59e0b; box-shadow: 0 10px 20px rgba(245,158,11,0.2);">
+                                Direct PayPal Checkout
+                            </button>
+                        </div>
+
+                        <!-- Tab 3: Crypto Checkout QR Mock -->
+                        <div id="pay-crypto" class="payment-tab-content" style="padding: 24px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: rgba(255,255,255,0.01);">
+                            <div class="crypto-flex-layout" style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+                                <!-- QR Mock -->
+                                <div style="width: 110px; height: 110px; background: #fff; border-radius: 8px; padding: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); flex-shrink: 0;">
+                                    <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #111 0%, #333 100%); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 0.72rem; font-weight: bold;">USDT QR MOCK</div>
+                                </div>
+                                
+                                <div class="crypto-meta-text" style="flex-grow: 1;">
+                                    <h4 style="font-size: 1.05rem; margin-bottom: 6px; color: var(--accent-secondary);">Dynamic Tether / BTC Address</h4>
+                                    <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 12px;">Send the exact total value to the wallet below. Supported on TRC-20 and ERC-20 networks.</p>
+                                    
+                                    <div class="copy-input-flex" style="display: flex; gap: 8px;">
+                                        <input type="text" class="form-control" style="font-size: 0.8rem; padding: 8px;" value="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" readonly id="crypto-wallet-val">
+                                        <button class="btn-secondary" style="padding: 0 12px; font-size: 0.8rem;" id="copy-wallet-btn">Copy</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn-primary" id="crypto-sim-btn" style="width: 100%; justify-content: center; margin-top: 24px; font-size: 1.02rem;">
+                                Confirm Crypto Transaction
+                            </button>
+                        </div>
+
+                        <!-- Tab 4: Bank Wire -->
+                        <div id="pay-wire" class="payment-tab-content" style="padding: 24px; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: rgba(255,255,255,0.01); display: flex; flex-direction: column; gap: 14px;">
+                            <h4 style="font-size: 1.15rem; color: var(--accent-primary);">FZ Media Corporate Account</h4>
+                            <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.4;">Initiate a direct bank wire or ACH transfer to our corporate banking partner:</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color);">
+                                <div>🏦 <strong>Bank:</strong> Creative Capital Trust, London</div>
+                                <div>🔑 <strong>IBAN:</strong> GB82 CCTB 3029 4810 5923 10</div>
+                                <div>🔑 <strong>SWIFT/BIC:</strong> CCTBGB2LXXX</div>
+                                <div>📁 <strong>Reference:</strong> Write your Business Name</div>
+                            </div>
+
+                            <button class="btn-primary" id="wire-sim-btn" style="justify-content: center; font-size: 1.02rem;">
+                                I Have Completed Bank Wire
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Shared Footer Mounting -->
+    <footer id="global-footer"></footer>
+
+    <!-- Payment Loading & Onboarding Success Modal -->
+    <div class="success-overlay-modal" id="success-modal">
+        <!-- Spinner card initially active, hidden upon success check -->
+        <div class="success-card" id="processing-card">
+            <span class="section-badge" style="font-size: 0.72rem; padding: 4px 10px; margin-bottom: 12px;">Gateway Connection</span>
+            <h3 style="font-size: 1.6rem; margin-bottom: 16px;">Authorizing Payment</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 30px;">Connecting to secure international clearing house. Initializing your FZ Client space database...</p>
+            
+            <!-- Beautiful animated CSS spinner -->
+            <div style="width: 50px; height: 50px; border-radius: 50%; border: 3px solid rgba(255,255,255,0.05); border-top-color: var(--accent-primary); animation: spin-loader 1s infinite linear; margin: 0 auto;"></div>
+        </div>
+
+        <!-- Success checkmark card, shown after spinner timeout -->
+        <div class="success-card" id="success-receipt-card" style="display: none;">
+            <div class="success-checkmark-circle">✓</div>
+            <h3 style="font-size: 1.8rem; margin-bottom: 12px; color: #4ade80;">Onboarding Confirmed!</h3>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.5; margin-bottom: 24px;">
+                Your global payment was successfully processed. We have pre-registered your FZ Client Workspace and setup your monthly subscription!
+            </p>
+            
+            <div style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); padding: 14px 20px; border-radius: 6px; text-align: left; font-size: 0.88rem; margin-bottom: 32px; display: flex; flex-direction: column; gap: 6px;">
+                <div>👤 <strong>Account:</strong> <span id="receipt-email-display">john@company.com</span></div>
+                <div>💼 <strong>Subscription:</strong> <span id="receipt-sub-display">Premium Growth Podcast Editing</span></div>
+                <div>⚡ <strong>Workspace status:</strong> Active Deliverables Preloaded</div>
+            </div>
+
+            <button class="btn-primary" style="width: 100%; justify-content: center;" id="receipt-login-btn">
+                Log In To Client Dashboard Now
+            </button>
+        </div>
+    </div>
+
+    <!-- JS Core & Controller -->
+    <script src="assets/js/global.js"></script>
+    <script>
+        let selectedService = "Cinematic Video Editing";
+        let selectedPackage = "Standard+";
+        let packagePrice = 70;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            parseParameters();
+            setup3DCardRotation();
+            setupPaymentTabs();
+            setupFormSync();
+            setupTransactions();
+            checkActiveSession();
+        });
+
+        // Helper: Check active client session and pre-fill sign-up credentials
+        function checkActiveSession() {
+            const savedEmail = sessionStorage.getItem("fzmedia_logged_client");
+            if (savedEmail) {
+                const db = getDB();
+                const loggedClient = db.clients.find(c => c.email.toLowerCase() === savedEmail.toLowerCase());
+                if (loggedClient) {
+                    const regName = document.getElementById("reg-name");
+                    const regCompany = document.getElementById("reg-company");
+                    const regEmail = document.getElementById("reg-email");
+                    const regPass = document.getElementById("reg-pass");
+                    
+                    if (regName) regName.value = loggedClient.name || "";
+                    if (regCompany) regCompany.value = loggedClient.company || "";
+                    if (regEmail) regEmail.value = loggedClient.email || "";
+                    if (regPass) regPass.value = loggedClient.password || "";
+                    
+                    // Visually badge the form header
+                    const sectionHeader = document.querySelector("#checkout-reg-form-heading");
+                    if (sectionHeader) {
+                        sectionHeader.innerHTML = `Create Your Client Workspace Account <span style="font-size: 0.8rem; color: var(--accent-secondary); margin-left: 6px; text-transform: none;">(Logged In)</span>`;
+                    }
+                }
+            }
+        }
+
+        // 1. Parse service and package parameters
+        function parseParameters() {
+            const params = new URLSearchParams(window.location.search);
+            const srv = params.get("service");
+            const pkg = params.get("package");
+            const prc = params.get("price");
+
+            if (srv && pkg) {
+                selectedService = srv;
+                selectedPackage = pkg;
+                
+                // Fetch price from DB
+                const db = getDB();
+                const srvObj = db.services.find(s => s.name === srv);
+                if (srvObj) {
+                    const pkgObj = srvObj.packages.find(p => p.name === pkg || p.name.includes(pkg));
+                    if (pkgObj) packagePrice = pkgObj.price;
+                }
+            }
+
+            if (prc) {
+                const parsedPrice = parseInt(prc, 10);
+                if (!isNaN(parsedPrice)) {
+                    packagePrice = parsedPrice;
+                }
+            }
+
+            // Update DOM summary fields
+            document.getElementById("summary-service-name").textContent = selectedService;
+            document.getElementById("summary-package-name").textContent = selectedPackage;
+            document.getElementById("summary-total-price").textContent = "$" + packagePrice;
+            document.getElementById("receipt-sub-display").textContent = `${selectedPackage} ${selectedService}`;
+        }
+
+        // 2. 3D Card Mouse Tilt and Input Focus rotations
+        function setup3DCardRotation() {
+            const cardWrapper = document.getElementById("card-3d-wrapper");
+            const cardInner = document.getElementById("card-3d-inner");
+            
+            if (!cardWrapper || !cardInner) return;
+
+            // Tilt card on mouse hover movement
+            cardWrapper.addEventListener("mousemove", (e) => {
+                const rect = cardWrapper.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const cardWidth = rect.width;
+                const cardHeight = rect.height;
+                
+                const rotateX = ((y / cardHeight) - 0.5) * -25; // max tilt degrees
+                const rotateY = ((x / cardWidth) - 0.5) * 25;
+                
+                // Avoid tilting back face when flipped
+                if (!cardInner.classList.contains("flipped")) {
+                    cardInner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                }
+            });
+
+            cardWrapper.addEventListener("mouseleave", () => {
+                if (!cardInner.classList.contains("flipped")) {
+                    cardInner.style.transform = "rotateX(0deg) rotateY(0deg)";
+                }
+            });
+
+            // Focus flip behavior
+            const cvvInput = document.getElementById("card-cvv-input");
+            if (cvvInput) {
+                cvvInput.addEventListener("focus", () => {
+                    cardInner.classList.add("flipped");
+                });
+                cvvInput.addEventListener("blur", () => {
+                    cardInner.classList.remove("flipped");
+                });
+            }
+        }
+
+        // 3. Payment Option tab switching
+        function setupPaymentTabs() {
+            const tabs = document.querySelectorAll(".checkout-tab-btn");
+            const contents = document.querySelectorAll(".payment-tab-content");
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", () => {
+                    tabs.forEach(t => t.classList.remove("active"));
+                    contents.forEach(c => c.classList.remove("active"));
+
+                    tab.classList.add("active");
+                    const targetId = tab.getAttribute("data-target");
+                    document.getElementById(targetId).classList.add("active");
+                });
+            });
+
+            // Copy crypto trigger
+            const copyBtn = document.getElementById("copy-wallet-btn");
+            if (copyBtn) {
+                copyBtn.addEventListener("click", () => {
+                    const walletVal = document.getElementById("crypto-wallet-val");
+                    walletVal.select();
+                    document.execCommand("copy");
+                    copyBtn.textContent = "Copied!";
+                    setTimeout(() => copyBtn.textContent = "Copy", 1500);
+                });
+            }
+        }
+
+        // 4. Input Syncing to Card Display text
+        function setupFormSync() {
+            const numInput = document.getElementById("card-num-input");
+            const nameInput = document.getElementById("reg-name");
+            const expInput = document.getElementById("card-expiry-input");
+            const cvvInput = document.getElementById("card-cvv-input");
+
+            const dispNum = document.getElementById("card-disp-num");
+            const dispName = document.getElementById("card-disp-name");
+            const dispExp = document.getElementById("card-disp-expiry");
+            const dispCvv = document.getElementById("card-disp-cvv");
+
+            if (numInput) {
+                numInput.addEventListener("input", (e) => {
+                    // Format space groupings on input
+                    let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                    let matches = value.match(/\d{4,16}/g);
+                    let match = matches && matches[0] || '';
+                    let parts = [];
+
+                    for (let i = 0, len = match.length; i < len; i += 4) {
+                        parts.push(match.substring(i, i + 4));
+                    }
+
+                    if (parts.length > 0) {
+                        e.target.value = parts.join(' ');
+                        dispNum.textContent = parts.join(' ');
+                    } else {
+                        dispNum.textContent = "•••• •••• •••• ••••";
+                    }
+                });
+            }
+
+            if (nameInput) {
+                nameInput.addEventListener("input", (e) => {
+                    dispName.textContent = e.target.value.trim().toUpperCase() || "YOUR NAME HERE";
+                });
+            }
+
+            if (expInput) {
+                expInput.addEventListener("input", (e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length > 2) {
+                        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                    }
+                    e.target.value = value;
+                    dispExp.textContent = value || "MM/YY";
+                });
+            }
+
+            if (cvvInput) {
+                cvvInput.addEventListener("input", (e) => {
+                    dispCvv.textContent = e.target.value.trim().replace(/./g, '•') || "•••";
+                });
+            }
+        }
+
+        // 5. Simulated Transactions Processing & Account Registration Onboarding
+        function setupTransactions() {
+            const cardForm = document.getElementById("payment-card-form");
+            const paypalBtn = document.getElementById("paypal-sim-btn");
+            const cryptoBtn = document.getElementById("crypto-sim-btn");
+            const wireBtn = document.getElementById("wire-sim-btn");
+
+            const modal = document.getElementById("success-modal");
+            const processingCard = document.getElementById("processing-card");
+            const successCard = document.getElementById("success-receipt-card");
+
+            function triggerOnboarding() {
+                // Read User Registration Details
+                const name = document.getElementById("reg-name").value.trim() || "John Doe";
+                const company = document.getElementById("reg-company").value.trim() || "Apex Tech Inc.";
+                const email = document.getElementById("reg-email").value.trim() || "client@gmail.com";
+                const pass = document.getElementById("reg-pass").value.trim() || "client123";
+
+                if (!document.getElementById("reg-name").value || !document.getElementById("reg-company").value || !document.getElementById("reg-email").value || !document.getElementById("reg-pass").value) {
+                    alert("Please fill out your account sign-up details (Section 1) before authorizing payment!");
+                    return;
+                }
+
+                // Show Gateway Connection Modal
+                modal.classList.add("open");
+                processingCard.style.display = "block";
+                successCard.style.display = "none";
+
+                // Simulate payment authorization delay
+                setTimeout(() => {
+                    // Update Database State!
+                    const db = getDB();
+                    
+                    // Check if client already exists to prevent resetting their database data
+                    const existingClient = db.clients.find(c => c.email.toLowerCase() === email.toLowerCase());
+                    
+                    if (existingClient) {
+                        // Update active packages while preserving their account history, chat messages, and briefs
+                        existingClient.name = name;
+                        existingClient.company = company;
+                        existingClient.activeSub = `${selectedPackage} ${selectedService}`;
+                        existingClient.packageLimits = `0 of 4 Video Drafts remaining this month`;
+                        
+                        // Append the new onboarding video project
+                        existingClient.projects.push({
+                            id: "cp-" + Date.now(),
+                            title: `${company} - ${selectedService} Onboarding Draft`,
+                            status: "In Queue",
+                            progress: 0,
+                            deliveryDate: new Date(Date.now() + 4*24*60*60*1000).toLocaleDateString(), // 4 days delivery
+                            videoUrl: "assets/videos/solo showreel.mp4",
+                            revisions: [],
+                            obsStream: {
+                                active: false,
+                                server: "rtmp://live.framezonemedia.com/live",
+                                key: "fz_live_" + name.replace(/\s+/g, '_').toLowerCase()
+                            }
+                        });
+                    } else {
+                        // Add new onboarding client profile
+                        const newClient = {
+                            email: email,
+                            password: pass,
+                            name: name,
+                            company: company,
+                            activeSub: `${selectedPackage} ${selectedService}`,
+                            packageLimits: `0 of 4 Video Drafts remaining this month`,
+                            projects: [
+                                {
+                                    id: "cp-" + Date.now(),
+                                    title: `${company} - ${selectedService} Onboarding Draft`,
+                                    status: "In Queue",
+                                    progress: 0,
+                                    deliveryDate: new Date(Date.now() + 4*24*60*60*1000).toLocaleDateString(), // 4 days delivery
+                                    videoUrl: "assets/videos/solo showreel.mp4",
+                                    revisions: [],
+                                    obsStream: {
+                                        active: false,
+                                        server: "rtmp://live.framezonemedia.com/live",
+                                        key: "fz_live_" + name.replace(/\s+/g, '_').toLowerCase()
+                                    }
+                                }
+                            ],
+                            briefs: []
+                        };
+                        db.clients.push(newClient);
+                    }
+                    
+                    // Log in central Admin Inbox brief queue
+                    db.inbox.push({
+                        id: "inq-" + Date.now(),
+                        name: name,
+                        email: email,
+                        brand: company,
+                        service: `${selectedService} (${selectedPackage})`,
+                        assetsLink: "http://awaiting-brief-footage-link",
+                        details: `AUTOMATED ONBOARDING: Package purchased online: ${selectedPackage} ${selectedService}. Total transaction value: $${packagePrice}.`,
+                        scheduledCall: "Payment Complete - Active Customer",
+                        dateReceived: new Date().toLocaleDateString()
+                    });
+
+                    saveDB(db);
+
+                    // Update receipt display
+                    document.getElementById("receipt-email-display").textContent = email;
+                    
+                    // Hide spinner, show success
+                    processingCard.style.display = "none";
+                    successCard.style.display = "block";
+                    
+                    // Auto login session pre-authenticated
+                    sessionStorage.setItem("fzmedia_logged_client", email);
+
+                }, 2200);
+            }
+
+            if (cardForm) {
+                cardForm.addEventListener("submit", (e) => {
+                    e.preventDefault();
+                    triggerOnboarding();
+                });
+            }
+
+            if (paypalBtn) paypalBtn.addEventListener("click", triggerOnboarding);
+            if (cryptoBtn) cryptoBtn.addEventListener("click", triggerOnboarding);
+            if (wireBtn) wireBtn.addEventListener("click", triggerOnboarding);
+
+            // Redirect to dashboard
+            const loginBtn = document.getElementById("receipt-login-btn");
+            if (loginBtn) {
+                loginBtn.addEventListener("click", () => {
+                    window.location.href = "client.html";
+                });
+            }
+        }
+    </script>
+</body>
+</html>
