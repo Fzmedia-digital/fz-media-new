@@ -408,6 +408,12 @@ function getDB() {
 
     const needsSave = deepMerge(parsed, DEFAULT_BRAND_DATA);
 
+    // Migrate logo icon path if using old default file
+    if (parsed.settings && parsed.settings.logoIconPath === "assets/img/logo/FZ logo 1.png") {
+        parsed.settings.logoIconPath = "assets/img/logo/FZ logo.ico";
+        localStorage.setItem("fzmedia_db", JSON.stringify(parsed));
+    }
+
     if (needsSave) {
         localStorage.setItem("fzmedia_db", JSON.stringify(parsed));
     }
