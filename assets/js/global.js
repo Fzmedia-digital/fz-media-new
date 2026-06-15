@@ -6,7 +6,7 @@ const DEFAULT_BRAND_DATA = {
         agencyName: "FZ Media",
         agencyFullName: "Frame Zone Media",
         logoPath: "assets/img/logo/FZ logo.png",
-        logoIconPath: "assets/img/logo/FZ logo 1.png",
+        logoIconPath: "assets/img/logo/FZ logo.ico",
         primaryColorH: 267,
         primaryColorS: 90,
         primaryColorL: 61,
@@ -713,7 +713,7 @@ function injectLayouts() {
         
         let logoMarkup = "";
         if (s.logoPath) {
-            logoMarkup = `<img src="${encodeURI(s.logoPath)}" alt="${s.agencyName}" class="brand-logo-img" onerror="this.src='assets/img/logo/FZ%20logo%201.png'">`;
+            logoMarkup = `<img src="${encodeURI(s.logoPath)}" alt="${s.agencyName}" class="brand-logo-img" onerror="this.src='assets/img/logo/FZ%20logo.png'">`;
         } else {
             logoMarkup = `<span class="brand-name">${s.agencyName}</span>`;
         }
@@ -796,7 +796,7 @@ function injectLayouts() {
         
         let logoMarkup = "";
         if (s.logoPath) {
-            logoMarkup = `<img src="${encodeURI(s.logoPath)}" alt="${s.agencyName}" class="brand-logo-img" style="height: 48px;" onerror="this.src='assets/img/logo/FZ%20logo%201.png'">`;
+            logoMarkup = `<img src="${encodeURI(s.logoPath)}" alt="${s.agencyName}" class="brand-logo-img" style="height: 48px;" onerror="this.src='assets/img/logo/FZ%20logo.png'">`;
         } else {
             logoMarkup = `<span class="brand-name" style="font-size: 1.8rem;">${s.agencyName}</span>`;
         }
