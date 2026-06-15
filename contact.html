@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact & Booking | FZ Media | Schedule Discovery Call</title>
+    <meta name="description" content="Get in touch with FZ Media. Submit your video briefs, link footage assets, or schedule an onboarding strategy meeting on our interactive calendar.">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/logo/FZ%20logo.ico" type="image/x-icon">
+</head>
+<body>
+
+    <!-- Shared Header Mounting -->
+    <header id="global-header"></header>
+
+    <main style="padding-top: 80px;">
+
+        <!-- 1. Section Header -->
+        <section class="section-padding" style="padding-bottom: 20px;">
+            <div class="container">
+                <div class="section-header" style="margin-bottom: 20px;">
+                    <span class="section-badge">Get In Touch</span>
+                    <h1 class="section-title">Schedule A Video Strategy Call</h1>
+                    <p class="section-subtitle">Let's map out a high-retention video funnel for your brand. Submit your inquiry details below or select a time on our direct calendar.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Interactive Booking Grid -->
+        <section style="padding-bottom: 100px;">
+            <div class="container">
+                
+                <div class="contact-grid">
+                    
+                    <!-- Left: Calendar Scheduler Mockup -->
+                    <div class="glass-card contact-info-panel">
+                        <div>
+                            <span class="section-badge" style="font-size: 0.72rem; padding: 4px 10px; margin-bottom: 12px;">Onboarding Calendar</span>
+                            <h3 style="font-size: 1.4rem; margin-bottom: 8px;">Direct Call Booking</h3>
+                            <p style="font-size: 0.9rem; color: var(--text-secondary);">Select a date and available time slot for your onboarding call with Manager Rifat Khan.</p>
+                        </div>
+                        
+                        <div class="calendar-mockup">
+                            <div class="calendar-header">
+                                <h4 id="calendar-month">May 2026</h4>
+                                <span style="font-size: 0.85rem; color: var(--accent-secondary); font-weight: 700;">Active Slots Only</span>
+                            </div>
+                            
+                            <div class="calendar-grid">
+                                <span class="calendar-day-name">Su</span>
+                                <span class="calendar-day-name">Mo</span>
+                                <span class="calendar-day-name">Tu</span>
+                                <span class="calendar-day-name">We</span>
+                                <span class="calendar-day-name">Th</span>
+                                <span class="calendar-day-name">Fr</span>
+                                <span class="calendar-day-name">Sa</span>
+                                
+                                <!-- Seeding a standard block for May 2026 (May 1st starts on Friday) -->
+                                <span class="calendar-cell empty"></span>
+                                <span class="calendar-cell empty"></span>
+                                <span class="calendar-cell empty"></span>
+                                <span class="calendar-cell empty"></span>
+                                <span class="calendar-cell empty"></span>
+                                <span class="calendar-cell">1</span>
+                                <span class="calendar-cell">2</span>
+                                
+                                <span class="calendar-cell">3</span>
+                                <span class="calendar-cell">4</span>
+                                <span class="calendar-cell">5</span>
+                                <span class="calendar-cell">6</span>
+                                <span class="calendar-cell">7</span>
+                                <span class="calendar-cell">8</span>
+                                <span class="calendar-cell">9</span>
+                                
+                                <span class="calendar-cell">10</span>
+                                <span class="calendar-cell">11</span>
+                                <span class="calendar-cell">12</span>
+                                <span class="calendar-cell">13</span>
+                                <span class="calendar-cell">14</span>
+                                <span class="calendar-cell">15</span>
+                                <span class="calendar-cell">16</span>
+                                
+                                <span class="calendar-cell">17</span>
+                                <span class="calendar-cell">18</span>
+                                <span class="calendar-cell">19</span>
+                                <span class="calendar-cell">20</span>
+                                <span class="calendar-cell">21</span>
+                                <span class="calendar-cell">22</span>
+                                <span class="calendar-cell">23</span>
+                                
+                                <span class="calendar-cell today">24</span>
+                                <span class="calendar-cell active">25</span>
+                                <span class="calendar-cell">26</span>
+                                <span class="calendar-cell">27</span>
+                                <span class="calendar-cell">28</span>
+                                <span class="calendar-cell">29</span>
+                                <span class="calendar-cell">30</span>
+                                <span class="calendar-cell">31</span>
+                            </div>
+
+                            <h4 style="font-size: 0.95rem; margin-bottom: 12px; border-top: 1px solid var(--border-color); padding-top: 16px;">Available Time Slots:</h4>
+                            <div class="time-slots-container" id="time-slots">
+                                <button class="time-slot-btn active" data-time="10:00 AM">10:00 AM</button>
+                                <button class="time-slot-btn" data-time="1:30 PM">1:30 PM</button>
+                                <button class="time-slot-btn" data-time="4:00 PM">4:00 PM</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Contact Form -->
+                    <div class="glass-card">
+                        <form id="contact-form">
+                            <h3 style="font-size: 1.6rem; margin-bottom: 24px;">Submit Custom Brief Inquiry</h3>
+                            
+                            <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="form-group">
+                                    <label class="form-label" for="client-name">Your Full Name *</label>
+                                    <input type="text" id="client-name" class="form-control" placeholder="John Doe" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="client-email">Email Address *</label>
+                                    <input type="email" id="client-email" class="form-control" placeholder="john@company.com" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                                <div class="form-group">
+                                    <label class="form-label" for="client-brand">Brand / Company Name</label>
+                                    <input type="text" id="client-brand" class="form-control" placeholder="Apex Brand">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="service-select">Target Service *</label>
+                                    <select id="service-select" class="form-control" style="background-color: var(--bg-secondary); border-color: var(--border-color); cursor: pointer;" required>
+                                        <option value="Podcast Editing">Podcast Editing Suite</option>
+                                        <option value="Cinematic Video Editing">Cinematic Video Editing</option>
+                                        <option value="Motion Graphics">Motion Graphics (After Effects)</option>
+                                        <option value="Real Estate Drone">Real Estate Drone Editing</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="client-website">Raw Footage Link / Drive Folder Link</label>
+                                <input type="url" id="client-website" class="form-control" placeholder="https://drive.google.com/drive/...">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="client-details">Describe Your Creative Goals & Timeline *</label>
+                                <textarea id="client-details" class="form-control" placeholder="Please specify your desired video runtime, references, pacing style, script outlines, and turnaround deadlines..." required></textarea>
+                            </div>
+
+                            <div style="margin-top: 16px;">
+                                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1.05rem;">
+                                    Secure Discovery Call & Submit Brief
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Shared Footer Mounting -->
+    <footer id="global-footer"></footer>
+
+    <!-- JS Core & Controller -->
+    <script src="assets/js/global.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            setupIntakeForm();
+            setupCalendarInteractions();
+        });
+
+        // Parse pricing parameters if present
+        function setupIntakeForm() {
+            const params = new URLSearchParams(window.location.search);
+            const selectedService = params.get("service");
+            
+            if (selectedService) {
+                const selectEl = document.getElementById("service-select");
+                if (selectEl) selectEl.value = selectedService;
+            }
+
+            const form = document.getElementById("contact-form");
+            if (!form) return;
+
+            form.addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                const db = getDB();
+                
+                // Fetch active selected date/time values
+                const selectedDayCell = document.querySelector(".calendar-cell.active");
+                const selectedDay = selectedDayCell ? selectedDayCell.textContent : "25";
+                const selectedTimeBtn = document.querySelector(".time-slot-btn.active");
+                const selectedTime = selectedTimeBtn ? selectedTimeBtn.getAttribute("data-time") : "10:00 AM";
+
+                const newInquiry = {
+                    id: "inq-" + Date.now(),
+                    name: document.getElementById("client-name").value.trim(),
+                    email: document.getElementById("client-email").value.trim(),
+                    brand: document.getElementById("client-brand").value.trim(),
+                    service: document.getElementById("service-select").value,
+                    assetsLink: document.getElementById("client-website").value.trim(),
+                    details: document.getElementById("client-details").value.trim(),
+                    scheduledCall: `May ${selectedDay}, 2026 at ${selectedTime}`,
+                    dateReceived: new Date().toLocaleDateString()
+                };
+
+                db.inbox.push(newInquiry);
+                saveDB(db);
+
+                alert(`Thank you, ${newInquiry.name}! Your strategy call is scheduled for ${newInquiry.scheduledCall}. We have logged your project brief details!`);
+                form.reset();
+            });
+        }
+
+        // Calendar visual selections
+        function setupCalendarInteractions() {
+            const cells = document.querySelectorAll(".calendar-cell:not(.empty)");
+            cells.forEach(cell => {
+                cell.addEventListener("click", () => {
+                    cells.forEach(c => c.classList.remove("active"));
+                    cell.classList.add("active");
+                });
+            });
+
+            const slots = document.querySelectorAll(".time-slot-btn");
+            slots.forEach(slot => {
+                slot.addEventListener("click", () => {
+                    slots.forEach(s => s.classList.remove("active"));
+                    slot.classList.add("active");
+                });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Workspace Portal | FZ Media</title>
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="assets/css/global.css?v=4.9">
+    <link rel="stylesheet" href="assets/css/client.css?v=4.9">
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/logo/FZ%20logo.ico" type="image/x-icon">
+</head>
+<body>
+
+    <!-- Shared Header Mounting -->
+    <header id="global-header"></header>
+
+    <main style="padding-top: 80px; min-height: 100vh;">
+        
+        <!-- 1. Client Authorization Login Screen -->
+        <section class="client-auth-section" id="auth-panel">
+            <div class="auth-glow-top"></div>
+            <div class="container" style="max-width: 460px;">
+                <div class="glass-card auth-card" style="text-align: center; padding: 32px 28px;">
+                    <span class="section-badge" style="font-size: 0.72rem; padding: 4px 10px; margin-bottom: 12px;">Client Portal</span>
+                    
+                    <!-- Auth Switch Tabs -->
+                    <div class="checkout-tabs" style="margin-bottom: 24px;" id="auth-tabs-row">
+                        <button class="checkout-tab-btn active" id="toggle-login-tab">Log In</button>
+                        <button class="checkout-tab-btn" id="toggle-signup-tab">Sign Up</button>
+                    </div>
+
+                    <div id="auth-error-msg" class="auth-error-alert" style="display: none;"></div>
+
+                    <!-- SOCIAL LOGINS -->
+                    <div id="social-auth-box" style="margin-bottom: 24px;">
+                        <div style="display: flex; gap: 12px; justify-content: center;">
+                            <button type="button" class="btn-secondary social-btn" id="social-btn-google" style="flex: 1; padding: 10px; font-size: 0.85rem; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: var(--text-primary); transition: var(--transition-snappy);">
+                                <svg width="18" height="18" viewBox="0 0 18 18">
+                                    <path fill="#4285F4" d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.91a8.78 8.78 0 0 0 2.69-6.6z"/>
+                                    <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.2l-2.91-2.26a5.52 5.52 0 0 1-8.08-2.9H1v2.33A9 9 0 0 0 9 18z"/>
+                                    <path fill="#FBBC05" d="M3.97 10.64a5.4 5.4 0 0 1 0-3.28V5.03H1v2.33a9 9 0 0 0 0 8.56l2.97-2.28z"/>
+                                    <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.1A9 9 0 0 0 1 5.03l2.97 2.28A5.4 5.4 0 0 1 9 3.58z"/>
+                                </svg>
+                                Google
+                            </button>
+                            <button type="button" class="btn-secondary social-btn" id="social-btn-linkedin" style="flex: 1; padding: 10px; font-size: 0.85rem; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); color: var(--text-primary); transition: var(--transition-snappy);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#0A66C2">
+                                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                </svg>
+                                LinkedIn
+                            </button>
+                        </div>
+                        <div class="or-separator" style="display: flex; align-items: center; justify-content: center; margin: 18px 0; color: var(--text-muted); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">
+                            <span style="border-bottom: 1px solid var(--border-color); flex: 1; margin-right: 12px; opacity: 0.5;"></span>
+                            or continue with email
+                            <span style="border-bottom: 1px solid var(--border-color); flex: 1; margin-left: 12px; opacity: 0.5;"></span>
+                        </div>
+                    </div>
+
+                    <!-- LOGIN FORM -->
+                    <form id="client-login-form" style="text-align: left;">
+                        <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Client Space Login</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 20px;">Access your active editing projects and revisions timeline.</p>
+
+                        <div class="form-group">
+                            <label class="form-label" for="client-auth-email">Client Account Email</label>
+                            <input type="email" id="client-auth-email" class="form-control" placeholder="Enter your email address" required>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 16px;">
+                            <label class="form-label" for="client-auth-pass">Password</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <input type="password" id="client-auth-pass" class="form-control" placeholder="••••••••" style="padding-right: 46px;" required>
+                                <button type="button" class="password-toggle-eye" style="position: absolute; right: 14px; background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; padding: 4px; z-index: 10;" aria-label="Toggle Password Visibility">
+                                    <svg class="eye-icon-visible" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="eye-icon-hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="text-align: right; margin-bottom: 24px;">
+                            <span style="font-size: 0.8rem; color: var(--text-muted); cursor: pointer;">Forgot Password?</span>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1rem;">
+                            Log In Workspace
+                        </button>
+                    </form>
+
+                    <!-- SIGNUP FORM (Hidden by default) -->
+                    <form id="client-signup-form" style="text-align: left; display: none;">
+                        <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Create Client Workspace</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 20px;">Register your FZ space and submit custom brief coordinates.</p>
+
+                        <div class="form-group">
+                            <label class="form-label" for="client-reg-name">Your Full Name *</label>
+                            <input type="text" id="client-reg-name" class="form-control" placeholder="John Doe" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="client-reg-company">Brand / Company Name *</label>
+                            <input type="text" id="client-reg-company" class="form-control" placeholder="e.g. Apex Tech Inc." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label" for="client-reg-email">Account Email *</label>
+                            <input type="email" id="client-reg-email" class="form-control" placeholder="Enter your email address" required>
+                        </div>
+                        
+                        <div class="form-group" style="margin-bottom: 28px;">
+                            <label class="form-label" for="client-reg-pass">Create Account Password *</label>
+                            <div style="position: relative; display: flex; align-items: center;">
+                                <input type="password" id="client-reg-pass" class="form-control" placeholder="••••••••" style="padding-right: 46px;" required>
+                                <button type="button" class="password-toggle-eye" style="position: absolute; right: 14px; background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; padding: 4px; z-index: 10;" aria-label="Toggle Password Visibility">
+                                    <svg class="eye-icon-visible" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    <svg class="eye-icon-hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1rem;">
+                            Register Account & Verify
+                        </button>
+                    </form>
+
+                    <!-- OTP VERIFICATION FORM (Hidden by default) -->
+                    <div id="client-otp-form" style="text-align: left; display: none;">
+                        <h2 style="font-size: 1.4rem; margin-bottom: 6px;">Verify Security Code</h2>
+                        <p style="color: var(--text-secondary); font-size: 0.82rem; margin-bottom: 24px;">We've sent a 6-digit verification code to <span id="otp-sent-email" style="color: var(--accent-primary); font-weight: 700;"></span>.</p>
+                        
+                        <div style="display: flex; gap: 8px; justify-content: space-between; margin-bottom: 24px;" class="otp-inputs-row">
+                            <input type="text" maxlength="1" class="form-control otp-box" style="width: 100%; max-width: 48px; aspect-ratio: 1; text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--accent-primary); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 0;" required>
+                            <input type="text" maxlength="1" class="form-control otp-box" style="width: 100%; max-width: 48px; aspect-ratio: 1; text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--accent-primary); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 0;" required>
+                            <input type="text" maxlength="1" class="form-control otp-box" style="width: 100%; max-width: 48px; aspect-ratio: 1; text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--accent-primary); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 0;" required>
+                            <input type="text" maxlength="1" class="form-control otp-box" style="width: 100%; max-width: 48px; aspect-ratio: 1; text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--accent-primary); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 0;" required>
+                            <input type="text" maxlength="1" class="form-control otp-box" style="width: 100%; max-width: 48px; aspect-ratio: 1; text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--accent-primary); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 0;" required>
+                            <input type="text" maxlength="1" class="form-control otp-box" style="width: 100%; max-width: 48px; aspect-ratio: 1; text-align: center; font-size: 1.4rem; font-weight: 700; color: var(--accent-primary); border-radius: var(--radius-md); background: rgba(255,255,255,0.02); border: 1px solid var(--border-color); padding: 0;" required>
+                        </div>
+
+                        <button type="button" id="otp-verify-btn" class="btn-primary" style="width: 100%; justify-content: center; font-size: 1rem; margin-bottom: 20px;">
+                            Verify & Access Workspace
+                        </button>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem;">
+                            <span id="otp-countdown" style="color: var(--text-muted);">Resend code in <span id="otp-seconds" style="color: var(--accent-secondary); font-weight: 700;">60</span>s</span>
+                            <button type="button" id="otp-resend-link" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; display: none;">Resend Code</button>
+                            <span id="otp-cancel-btn" style="color: var(--text-muted); cursor: pointer; font-weight: 600; text-decoration: underline;">Go Back</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Main Portal Workspace (Hidden by default until logged in) -->
+        <section class="client-dashboard-section" id="workspace-panel" style="display: none; padding: 40px 0;">
+            <div class="container">
+                
+                <!-- Dashboard Welcome Banner -->
+                <div class="dashboard-banner glass-card">
+                    <div class="banner-flex">
+                        <div>
+                            <span class="section-badge" style="font-size: 0.72rem; padding: 4px 10px; margin-bottom: 8px;" id="client-company-badge">Apex Tech Inc.</span>
+                            <h2 style="font-size: 2.2rem;">Welcome back, <span id="client-welcome-name" class="text-gradient">John Doe</span>!</h2>
+                            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 6px;">Your monthly package is running cleanly. Let's build amazing visual edits today.</p>
+                        </div>
+                        
+                        <div class="banner-sub-info">
+                            <div>
+                                <div style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Active Monthly Suite</div>
+                                <div style="font-size: 1.15rem; font-weight: 700; color: var(--accent-primary);" id="client-active-sub">Premium Growth Podcast Editing</div>
+                                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px;" id="client-sub-limits">2 of 4 Video Drafts remaining this month</div>
+                            </div>
+                            <button class="btn-secondary" id="client-logout-btn" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); color: #f87171; padding: 6px 14px; font-size: 0.82rem; cursor: pointer; border-radius: var(--radius-sm); transition: var(--transition-snappy); width: 100%; text-align: center; justify-content: center; display: inline-flex; align-items: center; gap: 6px;">
+                                🚪 Log Out Workspace
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Four-Tab Interface Navigation -->
+                <div class="dashboard-tabs">
+                    <button class="dash-tab active" data-target="dash-active-projects">🎯 Active Deliverables</button>
+                    <button class="dash-tab" data-target="dash-revision-hub">🎬 Dynamic Revision Hub</button>
+                    <button class="dash-tab" data-target="dash-submit-brief">✍ Submit Video Brief</button>
+                    <button class="dash-tab" data-target="dash-support-chat">💬 Live Support Chat</button>
+                </div>
+
+                <!-- A. Active Projects Tab -->
+                <div class="dash-tab-content active" id="dash-active-projects">
+                    <div class="active-projects-grid" id="active-projects-container">
+                        <!-- Loaded dynamically by client.js -->
+                    </div>
+                </div>
+
+                <!-- B. Dynamic Revision Hub (Frame.io Style) -->
+                <div class="dash-tab-content" id="dash-revision-hub">
+                    <div class="revision-hub-layout">
+                        
+                        <!-- Left: Cinematic Player & Feedback form -->
+                        <div class="glass-card revision-player-card">
+                            <div class="active-draft-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                                <h3 id="active-revision-project-title" style="font-size: 1.3rem;">Apex Podcast Episode 12 - Marketing Hacks</h3>
+                                <span class="project-badge status-review" style="padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700;">Awaiting Review</span>
+                            </div>
+                            
+                            <!-- Cinematic Player Navigation Tabs -->
+                            <div class="revision-player-tabs" style="display: flex; gap: 12px; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 8px;">
+                                <button type="button" class="dash-tab active" id="tab-review-draft" style="background: transparent; border: none; color: var(--text-primary); font-weight: 600; padding: 6px 12px; cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; transition: var(--transition-snappy);">
+                                    <span>📁</span> Review Video Draft
+                                </button>
+                                <button type="button" class="dash-tab" id="tab-live-broadcast" style="background: transparent; border: none; color: var(--text-secondary); font-weight: 500; padding: 6px 12px; cursor: pointer; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; transition: var(--transition-snappy); position: relative;">
+                                    <span>🔴</span> Live Broadcast Room
+                                    <span class="live-ping-dot" style="display: none; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; position: absolute; top: 0; right: 0; animation: pulse-badge 1.5s infinite;"></span>
+                                </button>
+                            </div>
+                            
+                            <!-- Custom HTML5 video draft player -->
+                            <div class="draft-video-player-container" style="transition: var(--transition-smooth); width: 100%;">
+                                <video id="draft-video-player" class="draft-video-player" controls style="width: 100%; border-radius: 8px; border: 1px solid var(--border-color); aspect-ratio: 16/9; background: #000;">
+                                    <source src="assets/videos/VID 1.mp4" type="video/mp4">
+                                    Your browser does not support HTML5 video previewing.
+                                </video>
+                            </div>
+
+                            <!-- Paired OBS Livestream Receiver View Container -->
+                            <div id="live-broadcast-container" style="display: none; position: relative; border-radius: 8px; overflow: hidden; background: #0b0c10; aspect-ratio: 16/9; width: 100%; border: 1px solid var(--border-color); transition: var(--transition-smooth);">
+                                <!-- Offline view -->
+                                <div id="live-offline-view" style="width: 100%; height: 100%; position: relative;">
+                                    <canvas id="offline-shutter-canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+                                    <div class="offline-overlay" style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; background: rgba(0,0,0,0.65); pointer-events: none; text-align: center; padding: 20px;">
+                                        <div style="font-size: 2.8rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.4));">📡</div>
+                                        <h4 style="font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 6px; font-family: var(--font-headings);">Broadcast Room Offline</h4>
+                                        <p style="font-size: 0.85rem; color: var(--text-muted); max-width: 380px; line-height: 1.45;">Your editor is currently crafting your next masterpiece. Move your cursor over the active radar scanner above to interact!</p>
+                                    </div>
+                                </div>
+                                <!-- Online view -->
+                                <div id="live-online-view" style="width: 100%; height: 100%; position: relative; display: none; overflow: hidden;">
+                                    <!-- Livestream simulated background feed -->
+                                    <div style="position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat; filter: brightness(0.6);"></div>
+                                    <div class="cyberpunk-scanlines" style="position: absolute; inset: 0; pointer-events: none; opacity: 0.15; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px;"></div>
+                                    
+                                    <!-- Stream Overlays -->
+                                    <div style="position: absolute; top: 16px; left: 16px; display: inline-flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.7); padding: 6px 14px; border-radius: 6px; border: 1px solid rgba(239, 68, 68, 0.4); box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                                         <span style="width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; animation: pulse-badge 1.5s infinite;"></span>
+                                         <span style="font-size: 0.72rem; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 0.05em; font-family: monospace;">LIVE EDIT SESSION</span>
+                                     </div>
+                                     <div id="stream-timecode" style="position: absolute; top: 16px; right: 16px; font-family: monospace; font-size: 0.8rem; color: #10b981; background: rgba(0,0,0,0.7); padding: 6px 14px; border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.4); box-shadow: 0 4px 12px rgba(0,0,0,0.5);">
+                                         TC 00:00:00:00
+                                     </div>
+                                     
+                                     <!-- Mock Editor Livestream Console HUD -->
+                                     <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.95) 70%); padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                                             <div>
+                                                 <h5 style="color: #fff; font-size: 0.95rem; margin-bottom: 2px; font-weight: 700; font-family: var(--font-headings);" id="online-stream-project-title">Apex Podcast Editing Onboarding</h5>
+                                                 <span style="font-size: 0.72rem; color: #10b981; font-family: monospace;" id="online-stream-credentials">Server: rtmp://live.framezonemedia.com/live | Key: fz_live_apex</span>
+                                             </div>
+                                             <div style="display: inline-flex; align-items: center; gap: 12px;">
+                                                 <span style="font-size: 0.72rem; color: var(--text-muted);">BITRATE: <span style="color: var(--accent-secondary); font-family: monospace; font-weight: 700;">5840 kbps</span></span>
+                                                 <span style="font-size: 0.72rem; color: var(--text-muted);">FPS: <span style="color: var(--accent-secondary); font-family: monospace; font-weight: 700;">60.00</span></span>
+                                             </div>
+                                         </div>
+                                         <!-- Dynamic HSL VU meters -->
+                                         <div style="display: flex; flex-direction: column; gap: 4px;">
+                                             <div style="display: flex; align-items: center; gap: 8px;">
+                                                 <span style="font-size: 0.65rem; color: var(--text-muted); font-family: monospace; width: 12px;">L</span>
+                                                 <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; display: flex;">
+                                                     <div id="vu-left-green" style="width: 70%; background: #10b981; height: 100%; transition: width 0.08s ease;"></div>
+                                                     <div id="vu-left-yellow" style="width: 15%; background: #fbbf24; height: 100%; transition: width 0.08s ease;"></div>
+                                                     <div id="vu-left-red" style="width: 5%; background: #ef4444; height: 100%; transition: width 0.08s ease;"></div>
+                                                 </div>
+                                             </div>
+                                             <div style="display: flex; align-items: center; gap: 8px;">
+                                                 <span style="font-size: 0.65rem; color: var(--text-muted); font-family: monospace; width: 12px;">R</span>
+                                                 <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; display: flex;">
+                                                     <div id="vu-right-green" style="width: 68%; background: #10b981; height: 100%; transition: width 0.08s ease;"></div>
+                                                     <div id="vu-right-yellow" style="width: 12%; background: #fbbf24; height: 100%; transition: width 0.08s ease;"></div>
+                                                     <div id="vu-right-red" style="width: 3%; background: #ef4444; height: 100%; transition: width 0.08s ease;"></div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                            
+                            <!-- Timestamped Feedback Form -->
+                            <form id="timestamp-feedback-form" style="margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 20px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                                    <h4 style="font-size: 1rem; font-family: var(--font-body); font-weight: 600;">Submit Frame Feedback</h4>
+                                    <div class="timestamp-badge-box">
+                                        <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem; border-radius: var(--radius-sm);" id="capture-time-btn">
+                                            Capture Playhead Time ➔ <span id="current-playhead-badge" style="color: var(--accent-primary); font-weight: 800;">00:00</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group" style="margin-bottom: 16px;">
+                                    <input type="text" class="form-control" id="feedback-text" placeholder="Explain the revision needed at this exact frame (e.g. 'Add zooming effects here', 'Fade music', 'Fix subtitle spelling')..." required>
+                                </div>
+                                
+                                <div style="text-align: right;">
+                                    <button type="submit" class="btn-primary" style="padding: 10px 24px; font-size: 0.9rem;">
+                                        Add Frame Revision Request
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Right: Feedback Timeline Checklist (Frame.io Style) -->
+                        <div class="glass-card revision-timeline-card">
+                            <h3 style="font-size: 1.3rem; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">Revisions Timeline Checklist</h3>
+                            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">Every request is stamped with playhead times. Click on any comment to jump to that exact frame!</p>
+                            
+                            <div class="feedback-checklist-feed" id="feedback-checklist-feed">
+                                <!-- Populated dynamically by client.js -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- C. Submit Video Brief Tab -->
+                <div class="dash-tab-content" id="dash-submit-brief">
+                    <div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+                        <form id="client-brief-form">
+                            <h3 style="font-size: 1.6rem; margin-bottom: 8px;">Order Dynamic Video Brief</h3>
+                            <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 32px;">Input your requirements. Rifat Khan will review it and coordinate the edit team immediately.</p>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="brief-title">Video Project Title *</label>
+                                <input type="text" id="brief-title" class="form-control" placeholder="e.g. Episode 13 - Creative Pacing Strategies" required>
+                            </div>
+                            
+                            <div class="client-form-grid">
+                                <div class="form-group">
+                                    <label class="form-label" for="brief-platform">Target Format / Aspect Ratio *</label>
+                                    <select id="brief-platform" class="form-control" style="background-color: var(--bg-secondary); border-color: var(--border-color); cursor: pointer;" required>
+                                        <option value="YouTube (16:9)">YouTube Explainer Video (16:9 Landscape)</option>
+                                        <option value="Shorts / TikTok (9:16)">Shorts, Reels & TikToks (9:16 Vertical)</option>
+                                        <option value="SaaS Promo / Ad (Square 1:1)">SaaS Ad Video (Square 1:1)</option>
+                                        <option value="Documentary / Cinematic">Cinematic Wide Documentaries</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="brief-pacing">Visual Pacing Style *</label>
+                                    <select id="brief-pacing" class="form-control" style="background-color: var(--bg-secondary); border-color: var(--border-color); cursor: pointer;" required>
+                                        <option value="High retention (Hook, fast text overlays)">High Retention Fast-cut (Hook, fast text, zooming)</option>
+                                        <option value="Cinematic narrative (Graded storytelling)">Cinematic Storytelling (Rich grades, seamless transitions)</option>
+                                        <option value="Minimal clean explainer">Clean Explainer (Minimal, modern lower-thirds)</option>
+                                        <option value="Vibrant after effects motion">High AE Motion Graphics (Flyer styling, heavy effects)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                             <div class="form-group" style="margin-bottom: 20px;">
+                                 <label class="form-label" for="brief-text-anim">Text Animation Preference *</label>
+                                 <select id="brief-text-anim" class="form-control" style="background-color: var(--bg-secondary); border-color: var(--border-color); cursor: pointer;" required>
+                                     <option value="Dynamic Pop & Bounce (Hormozi / Peak retention)">💥 Dynamic Pop & Bounce (Alex Hormozi High-Retention Style)</option>
+                                     <option value="Neon Glitch & Glow (Cyberpunk High-Tech)">⚡ Neon Glitch & Glow (Chromatic Cyberpunk Effects)</option>
+                                     <option value="Smooth Slide & Liquid Reveal">💧 Smooth Slide & Liquid Reveal (Fluid Elastic Motions)</option>
+                                     <option value="Cinematic Minimalist (Clean fade & zoom)">🎬 Cinematic Minimalist (Elegant Editorial Sans-Serif)</option>
+                                     <option value="Bold Kinetic Typography (Word-by-Word)">🔥 Bold Kinetic Typography (Aggressive High-Impact Cuts)</option>
+                                     <option value="Classic Captions / Standard Subtitles">📝 Classic Captions / Standard lower-third Subtitles</option>
+                                 </select>
+                             </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="brief-footage">Raw Footage Cloud Link *</label>
+                                <input type="url" id="brief-footage" class="form-control" placeholder="WeTransfer, Google Drive, or Dropbox folder link" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="brief-details">Detailed Creative Guidelines, Scripts & Reference Videos *</label>
+                                <textarea id="brief-details" class="form-control" placeholder="Specify: Reference video links, spelling of specific terms, outline of scripting notes, what background music elements you love..." required></textarea>
+                            </div>
+
+                            <div style="margin-top: 24px; text-align: right;">
+                                <button type="submit" class="btn-primary" style="padding: 12px 36px; font-size: 1rem;">
+                                    Submit Video Brief to Editors
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- D. Support Chat Panel [NEW] -->
+                <div class="dash-tab-content" id="dash-support-chat">
+                    <div class="glass-card chat-workspace-card" style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; height: 520px; overflow: hidden; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                        <div class="chat-header" style="padding: 16px 24px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.15);">
+                            <span style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; display: inline-block; animation: pulse-badge 1.5s infinite;"></span>
+                            <h3 style="font-size: 1.2rem; font-weight: 700;">Direct Messaging with FZ Support</h3>
+                        </div>
+                        <div class="chat-messages-container" id="client-chat-messages" style="flex-grow: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; background: rgba(0,0,0,0.25);">
+                            <!-- Populated by JS -->
+                        </div>
+                        <form id="client-chat-form" style="display: flex; gap: 12px; padding: 18px 24px; border-top: 1px solid var(--border-color); background: rgba(0,0,0,0.15);">
+                            <input type="text" id="client-chat-input" class="form-control" placeholder="Type a message to your editor..." required>
+                            <button type="submit" class="btn-primary" style="padding: 10px 24px; font-size: 0.9rem;">Send</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Mock Social OAuth Secure Gateway Popup -->
+    <div id="mock-oauth-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 10000; align-items: center; justify-content: center;">
+        <div class="glass-card oauth-popup-card" style="width: 90%; max-width: 440px; border-radius: var(--radius-lg); padding: 32px; text-align: center; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.9); transition: all 0.3s ease; background: rgba(15,15,15,0.7);">
+            <div style="display: flex; justify-content: center; gap: 16px; align-items: center; margin-bottom: 24px;">
+                <img src="assets/img/logo/FZ%20logo.ico" style="height: 38px; border-radius: 6px;">
+                <span style="font-size: 1.5rem; color: var(--text-muted);">⚡</span>
+                <span id="oauth-logo-placeholder"></span>
+            </div>
+            
+            <h3 style="font-size: 1.4rem; margin-bottom: 8px;" id="oauth-title">Connect with Google</h3>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 28px;" id="oauth-desc">FZ Media requests secure access to your profile data and email address.</p>
+            
+            <!-- Account Selection Mock -->
+            <div id="oauth-account-selection" style="margin-bottom: 28px;">
+                <div class="glass-card oauth-account-row" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-md); text-align: left; cursor: pointer; border: 1px solid var(--accent-primary); background: rgba(22, 163, 74, 0.05); margin-bottom: 12px;" id="oauth-select-primary">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;" id="oauth-avatar-char">J</div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.9rem;" id="oauth-profile-name">John Doe</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);" id="oauth-profile-email">john.doe@gmail.com</div>
+                    </div>
+                </div>
+                <div class="glass-card oauth-account-row" style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--radius-md); text-align: left; cursor: pointer; border: 1px solid var(--border-color);" id="oauth-select-another">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: 700; color: white;">+</div>
+                    <div>
+                        <div style="font-weight: 700; font-size: 0.9rem;">Use another account</div>
+                        <div style="font-size: 0.78rem; color: var(--text-muted);">Sign in with a different profile</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loader Mock -->
+            <div id="oauth-loader" style="display: none; margin: 32px 0;">
+                <div class="loading-spinner" style="margin: 0 auto 16px auto; width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.05); border-top-color: var(--accent-primary); border-radius: 50%; animation: spin 1s infinite linear;"></div>
+                <div style="font-size: 0.85rem; color: var(--text-muted);" id="oauth-loader-text">Authorizing with secure gateway...</div>
+            </div>
+
+            <div style="display: flex; gap: 12px;" id="oauth-actions-row">
+                <button type="button" class="btn-secondary" id="oauth-cancel-btn" style="flex: 1; justify-content: center;">Cancel</button>
+                <button type="button" class="btn-primary" id="oauth-approve-btn" style="flex: 1; justify-content: center;">Authorize Space</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shared Footer Mounting -->
+    <footer id="global-footer"></footer>
+
+    <!-- JS Core & Portal Controller -->
+    <script src="assets/js/global.js?v=4.9"></script>
+    <script src="assets/js/client.js?v=4.9"></script>
+</body>
+</html>

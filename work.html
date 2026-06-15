@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Work Portfolio | FZ Media | High-Retention Showcases</title>
+    <meta name="description" content="Explore FZ Media's filterable video portfolio. View YouTube edits, motion graphics, SaaS promo ads, and real-estate drone videos.">
+    
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="assets/css/global.css">
+    <link rel="stylesheet" href="assets/css/pages.css">
+    <link rel="stylesheet" href="assets/css/home.css"> <!-- Reuse Modal styling -->
+    
+    <style>
+        /* Portfolio page specific overrides */
+        .portfolio-header-section {
+            padding: 100px 0 40px 0;
+            text-align: center;
+        }
+        
+        .portfolio-controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 48px;
+            flex-wrap: wrap;
+        }
+        
+        .portfolio-search-box {
+            position: relative;
+            max-width: 320px;
+            width: 100%;
+        }
+        
+        .portfolio-search-input {
+            padding-right: 40px;
+        }
+        
+        .portfolio-search-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            font-size: 0.9rem;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+        
+        .portfolio-card {
+            cursor: pointer;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            padding: 0;
+            border-radius: var(--radius-lg);
+        }
+        
+        .portfolio-thumbnail-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            overflow: hidden;
+        }
+        
+        .portfolio-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.65;
+            transition: var(--transition-smooth);
+        }
+        
+        .portfolio-card:hover .portfolio-img {
+            transform: scale(1.05);
+            opacity: 0.45;
+        }
+        
+        .portfolio-play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--accent-primary);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            box-shadow: 0 10px 20px var(--accent-primary-glow);
+            transition: var(--transition-smooth);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .portfolio-card:hover .portfolio-play-btn {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .portfolio-card-info {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex-grow: 1;
+        }
+        
+        .portfolio-card-category {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--accent-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .portfolio-card h3 {
+            font-size: 1.25rem;
+            line-height: 1.3;
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-weight: 600;
+            transition: var(--transition-snappy);
+        }
+        
+        .portfolio-card:hover h3 {
+            color: var(--accent-primary);
+        }
+
+        .no-results-message {
+            grid-column: span 3;
+            text-align: center;
+            padding: 60px 0;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 991px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .portfolio-controls-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .portfolio-search-box {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/img/logo/FZ%20logo.ico" type="image/x-icon">
+</head>
+<body>
+
+    <!-- Shared Header Mounting -->
+    <header id="global-header"></header>
+
+    <main style="padding-top: 80px;">
+
+        <!-- 1. Page Header -->
+        <section class="portfolio-header-section">
+            <div class="container">
+                <span class="section-badge">Our Showcase</span>
+                <h1 style="font-size: 3rem; margin-top: 10px;">High-Retention Masterpieces</h1>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 12px auto 0 auto; font-size: 1.05rem;">Browse our dynamic edits, professional grade motion flyers, and customized brand animations.</p>
+            </div>
+        </section>
+
+        <!-- 2. Controls & Grid Section -->
+        <section class="portfolio-grid-section" style="padding-bottom: 100px;">
+            <div class="container">
+                
+                <!-- Centered Category Selector Tabs -->
+                <div class="services-tab-container" style="margin-bottom: 32px;">
+                    <div class="services-tabs-list" id="portfolio-tabs-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+                
+                <!-- Centered Search Box -->
+                <div style="display: flex; justify-content: center; margin-bottom: 48px;">
+                    <div class="portfolio-search-box" style="max-width: 400px; width: 100%;">
+                        <input type="text" class="form-control portfolio-search-input" id="portfolio-search" placeholder="Search projects...">
+                        <span class="portfolio-search-icon">🔍</span>
+                    </div>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="portfolio-grid" id="portfolio-grid">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Shared Footer Mounting -->
+    <footer id="global-footer"></footer>
+
+    <!-- Video Cinema Player Overlay Modal -->
+    <div class="video-modal-overlay" id="video-modal">
+        <div class="video-modal-close" id="video-modal-close">&times;</div>
+        <div class="video-modal-container">
+            <video class="video-modal-player" id="video-modal-player" controls>
+                <source src="" type="video/mp4">
+                Your browser does not support local video playback.
+            </video>
+        </div>
+    </div>
+
+    <!-- JS Core & Dynamic Logic -->
+    <script src="assets/js/global.js?v=4.8"></script>
+    <script src="assets/js/work.js?v=4.8"></script>
+</body>
+</html>
