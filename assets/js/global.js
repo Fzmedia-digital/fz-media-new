@@ -2,6 +2,7 @@
 
 // 1. Initial Seeding Setup
 const DEFAULT_BRAND_DATA = {
+    dbVersion: 1.1,
     settings: {
         agencyName: "FZ Media",
         agencyFullName: "Frame Zone Media",
@@ -469,6 +470,21 @@ function getDB() {
         localStorage.setItem("fzmedia_db", JSON.stringify(DEFAULT_BRAND_DATA));
         return DEFAULT_BRAND_DATA;
     }
+
+    // Database Upgrade System: force updates to default brand data settings if version changed
+    const currentVersion = 1.1;
+    let upgraded = false;
+    if (!parsed.dbVersion || parsed.dbVersion < currentVersion) {
+        parsed.settings = JSON.parse(JSON.stringify(DEFAULT_BRAND_DATA.settings));
+        parsed.team = JSON.parse(JSON.stringify(DEFAULT_BRAND_DATA.team));
+        parsed.services = JSON.parse(JSON.stringify(DEFAULT_BRAND_DATA.services));
+        parsed.portfolio = JSON.parse(JSON.stringify(DEFAULT_BRAND_DATA.portfolio));
+        parsed.testimonials = JSON.parse(JSON.stringify(DEFAULT_BRAND_DATA.testimonials));
+        parsed.navLinks = JSON.parse(JSON.stringify(DEFAULT_BRAND_DATA.navLinks));
+        parsed.dbVersion = currentVersion;
+        upgraded = true;
+        console.log("Database successfully migrated to version " + currentVersion);
+    }
     
     // Deep self-healing merge helper to safely populate nested missing collections/keys
     function deepMerge(target, source) {
@@ -514,7 +530,7 @@ function getDB() {
         });
     }
 
-    if (needsSave || teamMigrated) {
+    if (needsSave || teamMigrated || upgraded) {
         localStorage.setItem("fzmedia_db", JSON.stringify(parsed));
     }
 
