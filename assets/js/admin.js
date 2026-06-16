@@ -463,7 +463,7 @@ function setupTeamRosterCRUD() {
             role: document.getElementById("tm-role").value.trim(),
             experience: document.getElementById("tm-experience").value.trim(),
             title: document.getElementById("tm-title").value.trim(),
-            image: document.getElementById("tm-image").value.trim(),
+            image: resolveTeamAvatarPath(document.getElementById("tm-image").value.trim()),
             skills: document.getElementById("tm-skills").value.trim()
         };
 

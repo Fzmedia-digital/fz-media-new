@@ -32,22 +32,10 @@ const DEFAULT_BRAND_DATA = {
         customCardL: 5,
         customCardA: 0.4,
         customBorderH: 240,
-        customBorderA: 0.08,
-        customGlowH: 267,
-        customGlowS: 90,
-        textColorPrimary: "#f8fafc",
-        textColorSecondary: "#94a3b8",
-        textColorMuted: "#64748b",
-
         adminCredentials: {
             email: "framezonem@gmail.com",
-            passwordHash: "RnptZWRpYUAxMjM=" // Base64 for Fzmedia@123
+            passwordHash: "RnptZWRpYUAxMjM="
         },
-        gradientPreset: "obsidian-nebula",
-        gradientColor1: "#a855f7",
-        gradientColor2: "#06b6d4",
-        gradientColor3: "#1e1b4b",
-        gradientAnimate: true,
         socialLinks: {
             facebook: "https://www.facebook.com/FZoneM",
             instagram: "https://www.instagram.com/frame.zone.media/",
@@ -56,11 +44,12 @@ const DEFAULT_BRAND_DATA = {
             upwork: "https://www.upwork.com/freelancers/~0142030ef402084057?mp_source=share",
             whatsapp: "https://wa.me/8801635333356"
         },
+        theme: "liquid",
         heroVideo: {
             title: "Watch FZ Showreel",
             description: "Targeted VSL templates, product focus, and Call to Actions",
-            videoUrl: "assets/videos/solo showreel.mp4",
-            thumbnailUrl: "https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?auto=format&fit=crop&w=1000&q=80"
+            videoUrl: "https://www.youtube.com/watch?v=sf0EJ8ebevk",
+            thumbnailUrl: ""
         },
         calculator: {
             basePricePerMinute: 10,
@@ -70,12 +59,40 @@ const DEFAULT_BRAND_DATA = {
             premiumLabel: "Premium AE & Grading",
             premiumMultiplier: 50
         },
+        themePreset: "preset-neon-saas",
+        glowIntensity: 1.5,
+        glowAnimationSpeed: 3,
+        cardBorderRadius: 24,
+        cardBorderThickness: 1,
+        cardGlassBlur: 20,
+        fontPreset: "minimal-slate",
+        layoutGaps: 30,
+        sectionPadding: 80,
+        headerStyle: "floating-glass",
+        customBgH: 267,
+        customBgS: 15,
+        customBgL: 3,
+        customCardL: 6,
+        customCardA: 0.25,
+        customBorderH: 240,
+        customBorderA: 0.1,
+        customGlowH: 267,
+        customGlowS: 90,
+        textColorPrimary: "#f8fafc",
+        textColorSecondary: "#94a3b8",
+        textColorMuted: "#64748b",
+        glowSpread: 25,
         bgType: "preset",
-        bgImageUrl: "",
+        bgImageUrl: "https://www.pinterest.com/pin/702772716851343248/",
         bgEffect: "kinetic-orbs",
-        characterEnabled: true,
-        characterAvatar: "rifat-cinematic",
-        characterPos: "right-bottom"
+        characterEnabled: false,
+        characterAvatar: "neon-cyber",
+        characterPos: "right-bottom",
+        gradientPreset: "obsidian-nebula",
+        gradientColor1: "#a855f7",
+        gradientColor2: "#06b6d4",
+        gradientColor3: "#1e1b4b",
+        gradientAnimate: true
     },
     navLinks: [
         { text: "Home", url: "index.html" },
@@ -98,8 +115,8 @@ const DEFAULT_BRAND_DATA = {
             id: "team-2",
             name: "Rifat Khan",
             role: "Manager",
-            title: "Professional Video Editor",
             experience: "5+ Years",
+            title: "Professional Video Editor",
             image: "assets/img/team/Rifat.jpg",
             skills: "Adobe Premiere Pro, Cinematic Cuts, Sound Design, Color Grading, Client Coordination"
         },
@@ -107,8 +124,8 @@ const DEFAULT_BRAND_DATA = {
             id: "team-3",
             name: "Toimur Khan",
             role: "Member",
+            experience: "10+ Years",
             title: "Graphics Designer Expert",
-            experience: "3+ Years",
             image: "assets/img/team/Toimur.jpg",
             skills: "Photoshop, Illustrator, Vector Art, Brand Identity, Title Typography Design"
         },
@@ -116,8 +133,8 @@ const DEFAULT_BRAND_DATA = {
             id: "team-4",
             name: "Rajib Islam",
             role: "Member",
-            title: "Cinematographer",
             experience: "4+ Years",
+            title: "Cinematographer",
             image: "assets/img/team/Rajib.jpg",
             skills: "Drone Piloting, Camera Movements, Stabilizing, Lighting, Action Sequence Shooting"
         }
@@ -242,49 +259,33 @@ const DEFAULT_BRAND_DATA = {
             id: "port-1",
             title: "The Solo Content Creator Showreel",
             category: "YouTube Videos",
-            videoUrl: "assets/videos/solo showreel.mp4",
-            thumbnail: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&q=80",
-            likes: 124
+            videoUrl: "https://www.youtube.com/watch?v=rwo-Ww51KwU",
+            thumbnail: "https://img.youtube.com/vi/rwo-Ww51KwU/hqdefault.jpg",
+            likes: 100
         },
         {
             id: "port-2",
-            title: "Kinetic Typography Logo Reveal V4",
-            category: "Ad Creatives & VSL",
-            videoUrl: "assets/videos/logo animation.mp4",
-            thumbnail: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80",
-            likes: 98
+            title: "GoodKnight LV Showreel",
+            category: "SaaS Videos",
+            videoUrl: "https://www.youtube.com/watch?v=TXsx6k0608g",
+            thumbnail: "https://img.youtube.com/vi/TXsx6k0608g/hqdefault.jpg",
+            likes: 1000
         },
         {
             id: "port-3",
-            title: "Real Estate Property Drone Highlighting",
-            category: "Shorts & Reels",
-            videoUrl: "assets/videos/Social Proof.mp4", // fallback local file
-            thumbnail: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=80",
-            likes: 156
+            title: "Detal Care AD",
+            category: "Ad Creatives & VSL",
+            videoUrl: "https://youtube.com/shorts/BqyrgF4cV3k?feature=share",
+            thumbnail: "https://img.youtube.com/vi/BqyrgF4cV3k/hqdefault.jpg",
+            likes: 1560
         },
         {
             id: "port-4",
-            title: "Corporate SaaS Promotion & Ad Edit",
-            category: "SaaS Videos",
-            videoUrl: "assets/videos/VID 1.mp4",
-            thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80",
-            likes: 210
-        },
-        {
-            id: "port-5",
-            title: "Cinematic Typographic Storytelling V2",
+            title: "Fitness Project For Apex",
             category: "YouTube Videos",
-            videoUrl: "assets/videos/Typo Graphy 1.mp4",
-            thumbnail: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80",
-            likes: 85
-        },
-        {
-            id: "port-6",
-            title: "Client Testimonial Speech Integration",
-            category: "Ad Creatives & VSL",
-            videoUrl: "assets/videos/Social Proof.mp4",
-            thumbnail: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
-            likes: 142
+            videoUrl: "https://www.youtube.com/watch?v=UKPvCyvj77g",
+            thumbnail: "https://img.youtube.com/vi/UKPvCyvj77g/hqdefault.jpg",
+            likes: 1050
         }
     ],
     clients: [
@@ -328,9 +329,90 @@ const DEFAULT_BRAND_DATA = {
                 }
             ],
             briefs: []
+        },
+        {
+            email: "alex.mercer@gmail.com",
+            password: "social_login_auth_sso",
+            name: "Alex Mercer",
+            company: "Mercer Ventures",
+            activeSub: "Advanced Podcast Editing",
+            packageLimits: "0 of 4 Video Drafts remaining this month",
+            projects: [
+                {
+                    id: "cp-1779880718952",
+                    title: "Mercer Ventures - Podcast Editing Onboarding Draft",
+                    status: "In Queue",
+                    progress: 0,
+                    deliveryDate: "5/31/2026",
+                    videoUrl: "assets/videos/solo showreel.mp4",
+                    revisions: [],
+                    obsStream: {
+                        active: false,
+                        server: "rtmp://live.framezonemedia.com/live",
+                        key: "fz_live_alex_mercer"
+                    }
+                }
+            ],
+            briefs: []
         }
     ],
-    inbox: [],
+    inbox: [
+        {
+            id: "inq-1779624586000",
+            name: "Rifat Ur Jaman Khan",
+            email: "khantusher29@gmail.com",
+            brand: "tt6ft",
+            service: "Podcast Editing (Advanced)",
+            assetsLink: "http://awaiting-brief-footage-link",
+            details: "AUTOMATED ONBOARDING: Package purchased online: Advanced Podcast Editing. Total transaction value: $65.",
+            scheduledCall: "Payment Complete - Active Customer",
+            dateReceived: "5/24/2026"
+        },
+        {
+            id: "inq-1779642421870",
+            name: "Alex Mercer",
+            email: "alex.mercer@gmail.com",
+            brand: "Mercer Ventures",
+            service: "New Client Account",
+            assetsLink: "",
+            details: "A new client registered an account. Brand: Mercer Ventures. Awaiting package selection/onboarding.",
+            scheduledCall: "Registered Online",
+            dateReceived: "5/24/2026"
+        },
+        {
+            id: "inq-1779654516577",
+            name: "as",
+            email: "asasa",
+            brand: "asasasasas",
+            service: "Cinematic Video Editing (Standard+)",
+            assetsLink: "http://awaiting-brief-footage-link",
+            details: "AUTOMATED ONBOARDING: Package purchased online: Standard+ Cinematic Video Editing. Total transaction value: $70.",
+            scheduledCall: "Payment Complete - Active Customer",
+            dateReceived: "5/25/2026"
+        },
+        {
+            id: "inq-1779880678935",
+            name: "Alex Mercer",
+            email: "alex.mercer@gmail.com",
+            brand: "Mercer Ventures",
+            service: "New Client Account",
+            assetsLink: "",
+            details: "A new client registered an account. Brand: Mercer Ventures. Awaiting package selection/onboarding.",
+            scheduledCall: "Registered Online",
+            dateReceived: "5/27/2026"
+        },
+        {
+            id: "inq-1779880718952",
+            name: "Alex Mercer",
+            email: "alex.mercer@gmail.com",
+            brand: "Mercer Ventures",
+            service: "Podcast Editing (Advanced)",
+            assetsLink: "http://awaiting-brief-footage-link",
+            details: "AUTOMATED ONBOARDING: Package purchased online: Advanced Podcast Editing. Total transaction value: $65.",
+            scheduledCall: "Payment Complete - Active Customer",
+            dateReceived: "5/27/2026"
+        }
+    ],
     testimonials: [
         {
             id: "test-1",
@@ -416,10 +498,23 @@ function getDB() {
     // Migrate logo icon path if using old default file
     if (parsed.settings && parsed.settings.logoIconPath === "assets/img/logo/FZ logo 1.png") {
         parsed.settings.logoIconPath = "assets/img/logo/FZ logo.ico";
-        localStorage.setItem("fzmedia_db", JSON.stringify(parsed));
     }
 
-    if (needsSave) {
+    // Auto-resolve team avatar paths in database to ensure they are relative and portable
+    let teamMigrated = false;
+    if (parsed.team && Array.isArray(parsed.team)) {
+        parsed.team.forEach(member => {
+            if (member.image) {
+                const resolved = resolveTeamAvatarPath(member.image);
+                if (resolved !== member.image) {
+                    member.image = resolved;
+                    teamMigrated = true;
+                }
+            }
+        });
+    }
+
+    if (needsSave || teamMigrated) {
         localStorage.setItem("fzmedia_db", JSON.stringify(parsed));
     }
 
@@ -432,11 +527,22 @@ function saveDB(data) {
 
 function resolveTeamAvatarPath(path) {
     if (!path) return "";
-    path = path.trim();
+    path = path.trim().replace(/\\/g, '/');
+    
+    // Self-healing: if it contains assets/img/team/ anywhere, extract it
+    const teamIndex = path.indexOf("assets/img/team/");
+    if (teamIndex !== -1) {
+        return path.substring(teamIndex);
+    }
+    
     if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:") || path.startsWith("assets/") || path.startsWith("/")) {
         return path;
     }
-    return "assets/img/team/" + path;
+    
+    // Extract filename and prepend assets/img/team/
+    const lastSlash = path.lastIndexOf('/');
+    const filename = lastSlash !== -1 ? path.substring(lastSlash + 1) : path;
+    return "assets/img/team/" + filename;
 }
 
 // 3. Inject CSS Theme Colors & Premium Layout Styles Dynamically

@@ -695,8 +695,9 @@ function renderActiveDeliverables(client) {
             skills: "Premiere Pro, DaVinci Resolve, Colorist"
         };
 
-        const editorAvatar = assigned.image ? 
-            `<img src="${assigned.image}" alt="${assigned.name}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--accent-primary);">` : 
+        const resolvedImg = resolveTeamAvatarPath(assigned.image);
+        const editorAvatar = resolvedImg ? 
+            `<img src="${resolvedImg}" alt="${assigned.name}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--accent-primary);">` : 
             `<div style="width: 42px; height: 42px; border-radius: 50%; background: var(--accent-primary-glow); border: 1.5px solid var(--accent-primary); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; color: var(--text-primary);"><span>${assigned.name[0]}</span></div>`;
 
         const assignedEditorMarkup = `
