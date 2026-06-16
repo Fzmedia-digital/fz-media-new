@@ -243,8 +243,9 @@
             
             grid.innerHTML = db.team.map(member => {
                 let avatarMarkup = "";
-                if (member.image) {
-                    avatarMarkup = `<img src="${member.image}" alt="${member.name}" class="team-avatar-img" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80'">`;
+                const resolvedImg = resolveTeamAvatarPath(member.image);
+                if (resolvedImg) {
+                    avatarMarkup = `<img src="${resolvedImg}" alt="${member.name}" class="team-avatar-img" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80'">`;
                 } else {
                     avatarMarkup = `<div class="team-avatar-placeholder"><span>${member.name[0]}</span></div>`;
                 }

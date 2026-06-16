@@ -324,6 +324,13 @@ function setupAuthGuard() {
         const emailInput = document.getElementById("client-auth-email").value.trim();
         const passInput = document.getElementById("client-auth-pass").value.trim();
         
+        // Admin direct login bypass
+        if (emailInput.toLowerCase() === "framezonem@gmail.com" && passInput === "Fzmedia@123") {
+            sessionStorage.setItem("fzmedia_admin_logged", "true");
+            window.location.href = "admin.html";
+            return;
+        }
+        
         if (!isValidEmail(emailInput)) {
             errorMsg.textContent = "Incorrect email format. Please enter a valid clear email address (e.g. name@company.com).";
             errorMsg.style.display = "block";

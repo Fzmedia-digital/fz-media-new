@@ -1494,4 +1494,50 @@ body.theme-preset-preset-aurora-liquid .portfolio-card:hover {
     transform-origin: 170px 200px;
 }
 
+/* --------------------------------------------------------------------------
+   5. PREMIUM GRADIENT MESH BLUR THEME (Framer/Lovable template style)
+   -------------------------------------------------------------------------- */
+body.theme-gradient {
+    position: relative;
+    background: #030206;
+}
+
+.premium-gradient-bg-orb-container {
+    pointer-events: none;
+}
+
+.premium-gradient-bg-orb.animate-orb {
+    animation: premium-orb-float 25s infinite ease-in-out alternate;
+}
+
+.premium-gradient-bg-orb.orb-1.animate-orb {
+    animation-duration: 35s;
+    animation-delay: 0s;
+}
+
+.premium-gradient-bg-orb.orb-2.animate-orb {
+    animation-duration: 30s;
+    animation-delay: -5s;
+}
+
+.premium-gradient-bg-orb.orb-3.animate-orb {
+    animation-duration: 40s;
+    animation-delay: -10s;
+}
+
+@keyframes premium-orb-float {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+    33% {
+        transform: translate(120px, 60px) scale(1.1) rotate(120deg);
+    }
+    66% {
+        transform: translate(-60px, 120px) scale(0.95) rotate(240deg);
+    }
+    100% {
+        transform: translate(0, 0) scale(1) rotate(360deg);
+    }
+}
+
 

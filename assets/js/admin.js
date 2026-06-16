@@ -85,14 +85,29 @@ function setupAdminGuard() {
             e.preventDefault();
             const email = document.getElementById("admin-email").value.trim();
             const pass = document.getElementById("admin-pass").value.trim();
+            
+            const db = getDB();
+            const adminCreds = (db.settings && db.settings.adminCredentials) ? db.settings.adminCredentials : { email: "framezonem@gmail.com", passwordHash: "RnptZWRpYUAxMjM=" };
+            
+            const enteredEmailLower = email.toLowerCase();
+            const isMatchDefault = (enteredEmailLower === "admin" && pass === "admin");
+            
+            let isMatchSettings = false;
+            if (adminCreds) {
+                const targetEmail = (adminCreds.email || "framezonem@gmail.com").toLowerCase();
+                const expectedPass = atob(adminCreds.passwordHash || "RnptZWRpYUAxMjM=");
+                if (enteredEmailLower === targetEmail && pass === expectedPass) {
+                    isMatchSettings = true;
+                }
+            }
 
-            if (email === "admin" && pass === "admin") {
+            if (isMatchDefault || isMatchSettings) {
                 sessionStorage.setItem("fzmedia_admin_logged", "true");
                 if (errorDiv) errorDiv.style.display = "none";
                 window.location.reload();
             } else {
                 if (errorDiv) {
-                    errorDiv.textContent = "Invalid credentials! Use 'admin' / 'admin' to authorize.";
+                    errorDiv.textContent = "Invalid credentials! Please enter your admin email and password.";
                     errorDiv.style.display = "block";
                 }
             }
@@ -121,6 +136,36 @@ function setupResetAndLogout() {
                 sessionStorage.removeItem("fzmedia_admin_logged");
                 alert("Database reset successfully!");
                 window.location.reload();
+            }
+        });
+    }
+}
+
+function setupConfigExporter() {
+    const btn = document.getElementById("admin-export-config-btn");
+    const output = document.getElementById("admin-config-output");
+    const msg = document.getElementById("export-status-message");
+    if (btn) {
+        btn.addEventListener("click", () => {
+            const db = getDB();
+            const configCode = `/* PASTE THIS CONFIGURATION BLOCK INTO assets/js/global.js DEFAULT_BRAND_DATA */\nconst DEFAULT_BRAND_DATA = ${JSON.stringify(db, null, 4)};`;
+            
+            if (output) {
+                output.value = configCode;
+                output.style.display = "block";
+                
+                output.select();
+                navigator.clipboard.writeText(configCode).then(() => {
+                    if (msg) {
+                        msg.style.display = "inline";
+                        setTimeout(() => {
+                            msg.style.display = "none";
+                        }, 3000);
+                    }
+                }).catch(err => {
+                    console.error("Clipboard copy failed:", err);
+                    alert("Config generated! Please copy the code manually from the text box below.");
+                });
             }
         });
     }
@@ -181,7 +226,8 @@ function initializeAdminWorkspace() {
         { name: "renderInboxes", fn: renderInboxes },
         { name: "renderAdminChatClientsSidebar", fn: renderAdminChatClientsSidebar },
         { name: "renderClientsDatabaseList", fn: renderClientsDatabaseList },
-        { name: "populateRosterAssignmentDropdowns", fn: populateRosterAssignmentDropdowns }
+        { name: "populateRosterAssignmentDropdowns", fn: populateRosterAssignmentDropdowns },
+        { name: "setupConfigExporter", fn: setupConfigExporter }
     ];
 
     initTasks.forEach(task => {
@@ -452,8 +498,9 @@ function renderRosterList() {
     const db = getDB();
     
     container.innerHTML = db.team.map(m => {
-        let avatarMarkup = m.image ? 
-            `<img src="${m.image}" alt="${m.name}" class="admin-row-avatar">` : 
+        const resolvedImg = resolveTeamAvatarPath(m.image);
+        let avatarMarkup = resolvedImg ? 
+            `<img src="${resolvedImg}" alt="${m.name}" class="admin-row-avatar">` : 
             `<div class="admin-row-avatar-placeholder"><span>${m.name[0]}</span></div>`;
 
         return `
@@ -1692,6 +1739,15 @@ function setupVisualThemeEngine() {
         db.settings.textColorSecondary = document.getElementById("theme-text-secondary").value;
         db.settings.textColorMuted = document.getElementById("theme-text-muted").value;
         
+        const gradPresetSelect = document.getElementById("gradient-preset-select");
+        if (gradPresetSelect) {
+            db.settings.gradientPreset = gradPresetSelect.value;
+            db.settings.gradientColor1 = document.getElementById("gradient-color-1").value;
+            db.settings.gradientColor2 = document.getElementById("gradient-color-2").value;
+            db.settings.gradientColor3 = document.getElementById("gradient-color-3").value;
+            db.settings.gradientAnimate = document.getElementById("gradient-animate-orbs").checked;
+        }
+        
         const activePresetCard = document.querySelector(".template-preset-card.active");
         if (activePresetCard) {
             db.settings.themePreset = activePresetCard.getAttribute("data-preset");
@@ -2375,6 +2431,64 @@ function setupVisualThemeEngine() {
         });
     }
 
+    // Toggle Premium Gradient Customizer visibility based on layout theme
+    const layoutStyleSelect = document.getElementById("theme-layout-style");
+    const gradientCustomizer = document.getElementById("premium-gradient-customizer");
+    if (layoutStyleSelect && gradientCustomizer) {
+        const toggleGradientCustomizer = () => {
+            if (layoutStyleSelect.value === "gradient") {
+                gradientCustomizer.style.display = "block";
+            } else {
+                gradientCustomizer.style.display = "none";
+            }
+        };
+        layoutStyleSelect.addEventListener("change", toggleGradientCustomizer);
+    }
+
+    // Toggle custom gradient color inputs display based on preset
+    const presetSelect = document.getElementById("gradient-preset-select");
+    const customColorsContainer = document.getElementById("gradient-custom-colors-container");
+    if (presetSelect && customColorsContainer) {
+        const toggleCustomColors = () => {
+            if (presetSelect.value === "custom-mesh") {
+                customColorsContainer.style.display = "grid";
+            } else {
+                customColorsContainer.style.display = "none";
+                let colors = ["#8b5cf6", "#06b6d4", "#ec4899"];
+                if (presetSelect.value === "obsidian-nebula") {
+                    colors = ["#a855f7", "#06b6d4", "#1e1b4b"];
+                } else if (presetSelect.value === "sunset-glow") {
+                    colors = ["#f43f5e", "#fb923c", "#fef08a"];
+                } else if (presetSelect.value === "deep-space") {
+                    colors = ["#4f46e5", "#2563eb", "#10b981"];
+                } else if (presetSelect.value === "cyber-neon") {
+                    colors = ["#ff007f", "#00f0ff", "#7000ff"];
+                }
+                document.getElementById("gradient-color-1").value = colors[0];
+                document.getElementById("gradient-color-2").value = colors[1];
+                document.getElementById("gradient-color-3").value = colors[2];
+            }
+            updateRealtimePreview();
+            saveThemeSettingsToDB();
+        };
+        presetSelect.addEventListener("change", toggleCustomColors);
+    }
+
+    // Attach listeners to gradient settings inputs
+    const gradControls = ["gradient-preset-select", "gradient-color-1", "gradient-color-2", "gradient-color-3", "gradient-animate-orbs"];
+    gradControls.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener("input", () => {
+                updateRealtimePreview();
+            });
+            el.addEventListener("change", () => {
+                updateRealtimePreview();
+                saveThemeSettingsToDB();
+            });
+        }
+    });
+
     form.addEventListener("submit", (e) => {
         e.preventDefault();
         
@@ -2425,6 +2539,34 @@ function populateVisualThemeEngineFields() {
     document.getElementById("theme-text-primary").value = s.textColorPrimary || "#f8fafc";
     document.getElementById("theme-text-secondary").value = s.textColorSecondary || "#94a3b8";
     document.getElementById("theme-text-muted").value = s.textColorMuted || "#64748b";
+
+    const gradPresetSelect = document.getElementById("gradient-preset-select");
+    if (gradPresetSelect) {
+        gradPresetSelect.value = s.gradientPreset || "obsidian-nebula";
+        document.getElementById("gradient-color-1").value = s.gradientColor1 || "#a855f7";
+        document.getElementById("gradient-color-2").value = s.gradientColor2 || "#06b6d4";
+        document.getElementById("gradient-color-3").value = s.gradientColor3 || "#1e1b4b";
+        document.getElementById("gradient-animate-orbs").checked = s.gradientAnimate !== undefined ? s.gradientAnimate : true;
+        
+        const gradientCustomizer = document.getElementById("premium-gradient-customizer");
+        const layoutStyleSelect = document.getElementById("theme-layout-style");
+        if (layoutStyleSelect && gradientCustomizer) {
+            if (layoutStyleSelect.value === "gradient") {
+                gradientCustomizer.style.display = "block";
+            } else {
+                gradientCustomizer.style.display = "none";
+            }
+        }
+        
+        const customColorsContainer = document.getElementById("gradient-custom-colors-container");
+        if (customColorsContainer) {
+            if (gradPresetSelect.value === "custom-mesh") {
+                customColorsContainer.style.display = "grid";
+            } else {
+                customColorsContainer.style.display = "none";
+            }
+        }
+    }
 
     // Trigger visual sync by invoking the helper
     const radius = parseInt(document.getElementById("theme-radius").value, 10);

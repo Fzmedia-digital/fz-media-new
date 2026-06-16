@@ -40,9 +40,14 @@ const DEFAULT_BRAND_DATA = {
         textColorMuted: "#64748b",
 
         adminCredentials: {
-            email: "admin",
-            passwordHash: "YWRtaW4=" // Base64 for admin
+            email: "framezonem@gmail.com",
+            passwordHash: "RnptZWRpYUAxMjM=" // Base64 for Fzmedia@123
         },
+        gradientPreset: "obsidian-nebula",
+        gradientColor1: "#a855f7",
+        gradientColor2: "#06b6d4",
+        gradientColor3: "#1e1b4b",
+        gradientAnimate: true,
         socialLinks: {
             facebook: "https://www.facebook.com/FZoneM",
             instagram: "https://www.instagram.com/frame.zone.media/",
@@ -95,7 +100,7 @@ const DEFAULT_BRAND_DATA = {
             role: "Manager",
             title: "Professional Video Editor",
             experience: "5+ Years",
-            image: "assets/img/team/Protik 2.png",
+            image: "assets/img/team/Rifat.jpg",
             skills: "Adobe Premiere Pro, Cinematic Cuts, Sound Design, Color Grading, Client Coordination"
         },
         {
@@ -104,7 +109,7 @@ const DEFAULT_BRAND_DATA = {
             role: "Member",
             title: "Graphics Designer Expert",
             experience: "3+ Years",
-            image: "",
+            image: "assets/img/team/Toimur.jpg",
             skills: "Photoshop, Illustrator, Vector Art, Brand Identity, Title Typography Design"
         },
         {
@@ -113,7 +118,7 @@ const DEFAULT_BRAND_DATA = {
             role: "Member",
             title: "Cinematographer",
             experience: "4+ Years",
-            image: "",
+            image: "assets/img/team/Rajib.jpg",
             skills: "Drone Piloting, Camera Movements, Stabilizing, Lighting, Action Sequence Shooting"
         }
     ],
@@ -425,6 +430,15 @@ function saveDB(data) {
     localStorage.setItem("fzmedia_db", JSON.stringify(data));
 }
 
+function resolveTeamAvatarPath(path) {
+    if (!path) return "";
+    path = path.trim();
+    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("data:") || path.startsWith("assets/") || path.startsWith("/")) {
+        return path;
+    }
+    return "assets/img/team/" + path;
+}
+
 // 3. Inject CSS Theme Colors & Premium Layout Styles Dynamically
 function injectTheme() {
     const data = getDB();
@@ -492,6 +506,9 @@ function injectTheme() {
     // Remove existing layout classes
     document.body.classList.remove("theme-liquid", "theme-saas", "theme-gradient", "theme-flat");
     
+    // Clean up any gradient orbs if they exist
+    document.querySelectorAll(".premium-gradient-bg-orb-container").forEach(el => el.remove());
+    
     if (activeTheme === "liquid") {
         document.body.classList.add("theme-liquid");
         
@@ -512,6 +529,44 @@ function injectTheme() {
             document.body.classList.add("theme-saas");
         } else if (activeTheme === "gradient") {
             document.body.classList.add("theme-gradient");
+            
+            const preset = s.gradientPreset || "obsidian-nebula";
+            let c1 = s.gradientColor1 || "#a855f7";
+            let c2 = s.gradientColor2 || "#06b6d4";
+            let c3 = s.gradientColor3 || "#1e1b4b";
+            const isAnimated = s.gradientAnimate !== undefined ? s.gradientAnimate : true;
+            
+            if (preset !== "custom-mesh") {
+                if (preset === "obsidian-nebula") {
+                    c1 = "#a855f7"; c2 = "#06b6d4"; c3 = "#1e1b4b";
+                } else if (preset === "sunset-glow") {
+                    c1 = "#f43f5e"; c2 = "#fb923c"; c3 = "#fef08a";
+                } else if (preset === "deep-space") {
+                    c1 = "#4f46e5"; c2 = "#2563eb"; c3 = "#10b981";
+                } else if (preset === "cyber-neon") {
+                    c1 = "#ff007f"; c2 = "#00f0ff"; c3 = "#7000ff";
+                }
+            }
+            
+            const container = document.createElement("div");
+            container.className = "premium-gradient-bg-orb-container";
+            container.style.position = "fixed";
+            container.style.top = "0";
+            container.style.left = "0";
+            container.style.width = "100vw";
+            container.style.height = "100vh";
+            container.style.zIndex = "-2";
+            container.style.overflow = "hidden";
+            container.style.pointerEvents = "none";
+            
+            const animClass = isAnimated ? "animate-orb" : "";
+            
+            container.innerHTML = `
+                <div class="premium-gradient-bg-orb orb-1 ${animClass}" style="position: absolute; width: 600px; height: 600px; border-radius: 50%; background: ${c1}; filter: blur(140px); opacity: 0.35; top: -100px; left: -100px;"></div>
+                <div class="premium-gradient-bg-orb orb-2 ${animClass}" style="position: absolute; width: 500px; height: 500px; border-radius: 50%; background: ${c2}; filter: blur(140px); opacity: 0.35; bottom: -100px; right: -50px;"></div>
+                <div class="premium-gradient-bg-orb orb-3 ${animClass}" style="position: absolute; width: 400px; height: 400px; border-radius: 50%; background: ${c3}; filter: blur(140px); opacity: 0.25; top: 40%; left: 50%; transform: translate(-50%, -50%);"></div>
+            `;
+            document.body.appendChild(container);
         } else if (activeTheme === "flat") {
             document.body.classList.add("theme-flat");
         }
@@ -725,19 +780,36 @@ function injectLayouts() {
         }
 
         const isAdminLogged = sessionStorage.getItem("fzmedia_admin_logged") === "true";
-        let adminButtonMarkup = `<li><a href="admin.html" class="btn-primary" style="padding: 8px 16px; font-size: 0.88rem;">Admin</a></li>`;
-        if (isAdminLogged) {
-            adminButtonMarkup = `
-                <li><a href="admin.html" class="btn-primary" style="padding: 8px 16px; font-size: 0.88rem;">Admin</a></li>
+        const isPageAdmin = window.location.pathname.endsWith("admin.html");
+        
+        let navLinksMarkup = "";
+        let actionButtonsMarkup = "";
+        
+        if (isPageAdmin) {
+            navLinksMarkup = `
+                <li><a href="index.html" class="nav-link-item">← Back to Website</a></li>
+                <li><span style="display: inline-block; padding: 4px 10px; font-size: 0.72rem; font-weight: 700; color: #fff; background: var(--accent-primary-glow); border: 1px solid var(--accent-primary); border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Command Center</span></li>
+            `;
+            actionButtonsMarkup = `
                 <li><a href="#" id="global-admin-logout" class="btn-secondary" style="padding: 8px 16px; font-size: 0.88rem; border-color: rgba(239, 68, 68, 0.4); color: #f87171;">Logout</a></li>
             `;
+        } else {
+            navLinksMarkup = db.navLinks.map(link => {
+                let isActive = window.location.pathname.endsWith(link.url) ? "active" : "";
+                if (window.location.pathname === "/" && link.url === "index.html") isActive = "active";
+                return `<li><a href="${link.url}" class="nav-link-item ${isActive}">${link.text}</a></li>`;
+            }).join("");
+            
+            actionButtonsMarkup = `
+                <li><a href="client.html" class="btn-secondary" style="padding: 8px 16px; font-size: 0.88rem;">Client Portal</a></li>
+            `;
+            
+            if (isAdminLogged) {
+                actionButtonsMarkup += `
+                    <li><a href="admin.html" class="btn-secondary" style="padding: 8px 16px; font-size: 0.88rem; border-color: var(--accent-primary);"><span style="animation: pulse 1.5s infinite; display: inline-block; margin-right: 4px;">⚙️</span> Dashboard</a></li>
+                `;
+            }
         }
-
-        let navLinksMarkup = db.navLinks.map(link => {
-            let isActive = window.location.pathname.endsWith(link.url) ? "active" : "";
-            if (window.location.pathname === "/" && link.url === "index.html") isActive = "active";
-            return `<li><a href="${link.url}" class="nav-link-item ${isActive}">${link.text}</a></li>`;
-        }).join("");
 
         headerContainer.innerHTML = `
             <div class="container">
@@ -749,8 +821,7 @@ function injectLayouts() {
                     <nav class="nav-menu">
                         <ul class="nav-menu-links" id="nav-menu-links">
                             ${navLinksMarkup}
-                            <li><a href="client.html" class="btn-secondary" style="padding: 8px 16px; font-size: 0.88rem;">Client Portal</a></li>
-                            ${adminButtonMarkup}
+                            ${actionButtonsMarkup}
                         </ul>
                     </nav>
 
